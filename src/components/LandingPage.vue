@@ -24,6 +24,28 @@
         />
       </div>
     </section>
+    <section id="jogos-populares-section" class="jogos-populares-section">
+      <div class="container">
+        <h2 class="section-title">Jogos Populares</h2>
+        <div class="jogos-populares-cards">
+          <CustomCard
+              title="Valorant"
+              imgUrl="/images/image-valorant.jpg"
+              cardClass="large"
+          />
+          <CustomCard
+              title="CS2"
+              imgUrl="/images/image-cs2.jpg"
+              cardClass="medium"
+          />
+          <CustomCard
+              title="PUBG"
+              imgUrl="/images/image-pubg.jpg"
+              cardClass="small"
+          />
+        </div>
+      </div>
+    </section>
     <section id="quem-somos-section" class="quem-somos-section">
       <div class="container">
         <h2>Quem Somos</h2>
@@ -46,11 +68,13 @@
 
 <script>
 import GameCard from './GameCard.vue';
+import CustomCard from './CustomCard.vue';
 
 export default {
   name: 'LandingPage',
   components: {
-    GameCard
+    GameCard,
+    CustomCard
   }
 }
 </script>
@@ -78,7 +102,7 @@ export default {
 }
 
 .quem-somos-section {
-  background-color: #1a1a1a; /* Fundo escuro para destaque */
+  background-color: #1a1a1a;
   color: white;
   padding: 50px 0;
   text-align: center;
@@ -86,41 +110,40 @@ export default {
 
 .container {
   max-width: 1200px;
-  margin: 0 auto; /* Centraliza o container */
+  margin: 0 auto;
   padding: 20px;
-  position: relative; /* Posicionamento dos pseudo-elementos */
 }
 
 h2 {
   font-size: 2.5rem;
-  margin: 40px 0 30px; /* Ajuste na margem para espaço antes das linhas */
-  color: #f44336; /* Vermelho */
-  position: relative; /* Para os pseudo-elementos */
+  margin-bottom: 30px;
+  color: #f44336;
 }
 
 h2::before, h2::after {
   content: "";
   position: absolute;
-  height: 2px; /* Altura das linhas */
-  width: calc(100% - 40px); /* Largura ajustada para não tocar as bordas */
-  left: 20px; /* Centraliza a linha */
-}
-
-h2::before {
-  bottom: -20px; /* Posição para a linha branca */
-  background-color: #ffffff; /* Branco */
-}
-
-h2::after {
-  bottom: -22px; /* Posição ajustada para a linha vermelha ficar diretamente abaixo da branca */
-  background-color: #f44336; /* Vermelho */
+  height: 2px;
+  width: calc(100% - 40px);
+  left: 20px;
+  bottom: -20px;
 }
 
 p {
   font-size: 1.2rem;
   line-height: 1.8;
-  margin-top: 20px; /* Espaço depois das linhas */
+}
+
+.jogos-populares-section {
+  background-color: #474747;
+  color: white;
+  padding: 50px 0;
+  text-align: center;
+}
+
+.jogos-populares-section .jogos-populares-cards {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 </style>
-
-

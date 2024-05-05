@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LandingPage from '../components/LandingPage.vue';
+import UserLogin from "@/components/Login.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -9,7 +10,11 @@ const router = createRouter({
             name: 'home',
             component: LandingPage
         },
-        // Adicione mais rotas conforme necessário
+        {
+            path: '/login',
+            name: 'login',
+            component: UserLogin
+        },
     ]
 });
 
