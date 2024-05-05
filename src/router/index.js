@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LandingPage from '../components/LandingPage.vue';
 import UserLogin from "@/components/Login.vue";
-import Cadastro from "@/components/Cadastro.vue";  // Adicione esta linha para importar o componente Cadastro
+import Cadastro from "@/components/Cadastro.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -18,8 +18,8 @@ const router = createRouter({
         },
         {
             path: '/cadastro',
-            name: 'Cadastro',
-            component: Cadastro  // Agora o componente Cadastro está definido corretamente
+            name: 'cadastro',
+            component: Cadastro
         },
     ]
 });

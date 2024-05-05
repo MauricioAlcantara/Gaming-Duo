@@ -19,7 +19,10 @@
         <p v-if="showPasswordRequired" class="error-message">É necessário informar uma senha.</p>
       </div>
       <button type="submit">Entrar</button>
-      <p class="password-reset" @click="toggleResetPasswordModal">Esqueceu sua senha?</p>
+      <div class="footer-links">
+        <p class="password-reset" @click="toggleResetPasswordModal">Esqueceu sua senha?</p>
+        <p class="register-link" @click="goToRegister">Cadastre-se</p>
+      </div>
     </form>
     <div v-if="showResetPasswordModal" class="modal">
       <div class="modal-content">
@@ -71,6 +74,9 @@ export default {
     sendResetLink() {
       console.log('Enviar link de redefinição para:', this.resetEmail);
       this.toggleResetPasswordModal();
+    },
+    goToRegister() {
+      this.$router.push({ name: 'cadastro' });
     }
   }
 }
@@ -132,13 +138,16 @@ label {
   color: #ccc;
 }
 
-.password-reset {
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+}
+
+.password-reset, .register-link {
   color: #CCC;
-  text-align: left;
-  margin-top: 12px;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
-  display: block;
+  text-decoration: underline;
 }
 
 .modal {
@@ -150,17 +159,17 @@ label {
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
-  align-items: center; /* Alinha verticalmente ao centro */
+  align-items: center;
 }
 
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 400px; /* Ajuste essa largura conforme necessário */
+  width: 400px;
   text-align: center;
-  margin-top: 50px; /* Ajusta o modal para ficar mais baixo */
-  box-sizing: border-box; /* Garante que o padding seja incluído na largura */
+  margin-top: 50px;
+  box-sizing: border-box;
 }
 
 .close {
@@ -194,7 +203,6 @@ button {
   border-radius: 4px;
   font-size: 14px;
 }
-
 
 .required {
   color: #f90404;
