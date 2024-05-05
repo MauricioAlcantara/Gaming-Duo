@@ -29,6 +29,7 @@ export default {
   justify-content: space-between;
   background-color: #ffffff;
   margin: 10px;
+  transition: transform 0.3s ease;
 }
 
 .card-image {
@@ -62,5 +63,9 @@ export default {
 .card.small {
   height: 300px;
   border-color: #cd7f32;
+}
+
+.card:hover {
+  transform: scale(1.05);
 }
 </style>

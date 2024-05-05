@@ -49,18 +49,17 @@
     <section id="quem-somos-section" class="quem-somos-section">
       <div class="container">
         <h2>Quem Somos</h2>
-        <p>Gaming Duo foi criada com a visão de transformar a maneira como os jogadores se conectam e colaboram. Fundada em 2024 por uma equipe apaixonada por jogos e tecnologia, nossa missão é facilitar encontros entre jogadores ao redor do mundo, proporcionando a cada um deles a oportunidade de encontrar o parceiro ideal para jogar.</p>
-        <p>Desde o início, nos comprometemos a ser uma ponte para novas amizades e experiências compartilhadas. Acreditamos que jogar juntos não apenas melhora a experiência de jogo, mas também fortalece laços comunitários. Nossa plataforma é projetada para ser intuitiva e acolhedora, permitindo que jogadores de todos os níveis encontrem alguém compatível para jogar e crescer juntos.</p>
+        <p><strong>Gaming Duo</strong> foi fundada em 2024 com um propósito claro: transformar como os jogadores se conectam e colaboram globalmente. Nascidos de uma paixão conjunta por jogos e tecnologia, nossa missão é facilitar encontros que ultrapassem fronteiras, proporcionando a cada jogador a chance de encontrar o parceiro ideal.</p>
         <h3>Nossa Missão</h3>
-        <p>Nossa missão é enriquecer a experiência de jogo, tornando-a mais social e interativa. Gaming Duo busca ser o principal ponto de encontro para jogadores que desejam compartilhar suas aventuras com outros entusiastas, independente de onde estejam no mundo.</p>
+        <p>Enriquecer a experiência de jogo, tornando-a mais social e interativa. Buscamos ser o principal ponto de encontro para entusiastas de jogos, independente de onde estejam no mundo.</p>
         <h3>Nossos Valores</h3>
         <ul>
-          <li>Conexão Contínua: Nos dedicamos a criar conexões significativas que transcendem o jogo.</li>
-          <li>Qualidade Excepcional: Nosso compromisso com a excelência garante uma plataforma confiável e agradável.</li>
-          <li>Paixão por Jogos: Movidos pela nossa paixão, estamos sempre buscando maneiras de melhorar a experiência dos nossos usuários.</li>
-          <li>Comunidade: Fomentamos uma comunidade onde todos se sintam seguros para explorar, aprender e se divertir.</li>
+          <li><strong>Conexão Contínua:</strong> Criamos conexões que transcendem o jogo.</li>
+          <li><strong>Qualidade Excepcional:</strong> Comprometidos com a excelência para garantir uma plataforma confiável.</li>
+          <li><strong>Paixão por Jogos:</strong> Motivados por nossa paixão, buscamos continuamente melhorar a experiência de jogo.</li>
+          <li><strong>Comunidade:</strong> Promovemos uma comunidade segura onde todos podem explorar, aprender e se divertir.</li>
         </ul>
-        <p>Em Gaming Duo, olhamos sempre para o futuro, prontos para abraçar novas tecnologias e superar desafios que nos movem para frente. Convidamos você a se juntar a nós nessa jornada emocionante pelo mundo dos jogos online.</p>
+        <p>Em <strong>Gaming Duo</strong>, olhamos sempre para o futuro, prontos para abraçar novas tecnologias e superar desafios que nos movem para frente.</p>
       </div>
     </section>
   </div>
@@ -87,7 +86,7 @@ export default {
   justify-content: flex-end;
   min-height: 100vh;
   width: 100%;
-  background-image: url('@/assets/background-image.jpg');
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 100%), url('@/assets/background-image.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -101,9 +100,9 @@ export default {
   width: 100%;
 }
 
-.quem-somos-section {
-  background-color: #1a1a1a;
-  color: white;
+.quem-somos-section, .jogos-populares-section {
+  background-color: #202020; /* Slightly lighter than original for better readability */
+  color: #E0E0E0; /* Lighter gray text for better readability */
   padding: 50px 0;
   text-align: center;
 }
@@ -117,7 +116,8 @@ export default {
 h2 {
   font-size: 2.5rem;
   margin-bottom: 30px;
-  color: #f44336;
+  color: #D32F2F; /* Slightly softer red */
+  position: relative;
 }
 
 h2::before, h2::after {
@@ -127,15 +127,17 @@ h2::before, h2::after {
   width: calc(100% - 40px);
   left: 20px;
   bottom: -20px;
+  background-color: #D32F2F; /* Matching the title color */
 }
 
-p {
+p, li {
   font-size: 1.2rem;
   line-height: 1.8;
+  color: #E0E0E0; /* Lighter grey for better readability */
 }
 
 .jogos-populares-section {
-  background-color: #474747;
+  background-color: #545454;
   color: white;
   padding: 50px 0;
   text-align: center;
@@ -145,15 +147,5 @@ p {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-}
-
-.jogos-populares-cards .card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-}
-
-.jogos-populares-cards .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 </style>
