@@ -86,7 +86,7 @@ export default {
   justify-content: flex-end;
   min-height: 100vh;
   width: 100%;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, transparent 100%), url('@/assets/background-image.jpg');
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, transparent 100%), url('@/assets/background-image.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -101,8 +101,8 @@ export default {
 }
 
 .quem-somos-section, .jogos-populares-section {
-  background-color: #202020; /* Slightly lighter than original for better readability */
-  color: #E0E0E0; /* Lighter gray text for better readability */
+  background-color: #202020;
+  color: #E0E0E0;
   padding: 50px 0;
   text-align: center;
 }
