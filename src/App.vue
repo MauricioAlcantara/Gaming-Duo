@@ -1,16 +1,24 @@
 <template>
   <div id="app">
-    <TopBar/>
+    <TopBar @toggle-chat="toggleChat"/>
     <router-view/>
+    <chat-help ref="chatHelp"></chat-help>
   </div>
 </template>
 
 <script>
 import TopBar from './components/TopBar.vue'
+import ChatHelp from './components/ChatHelp.vue'
 
 export default {
   components: {
-    TopBar
+    TopBar,
+    ChatHelp
+  },
+  methods: {
+    toggleChat() {
+      this.$refs.chatHelp.toggleChat();
+    }
   }
 }
 </script>

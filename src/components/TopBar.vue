@@ -4,7 +4,7 @@
     <span class="site-name" @click="goToHome">Gaming Duo</span>
     <nav v-if="showNavigationButtons">
       <button @click="scrollToSection('quem-somos-section')">Sobre Nós</button>
-      <button @click="goToRoute('help')">Ajuda</button>
+      <button @click="$emit('toggle-chat')">Ajuda</button>
       <button class="button-login" @click="goToRoute('login')">Entrar</button>
       <button class="button-register" @click="goToRoute('cadastro')">Cadastrar-se</button>
     </nav>
@@ -15,7 +15,6 @@
 export default {
   computed: {
     showNavigationButtons() {
-      // Oculta os botões na tela de login ou cadastro
       return !['login', 'cadastro'].includes(this.$route.name);
     }
   },
@@ -29,6 +28,9 @@ export default {
     },
     goToRoute(routeName) {
       this.$router.push({ name: routeName });
+    },
+    openHelpChat() {
+      this.$parent.$refs.chatComponent.openChat();
     },
     scrollToSection(sectionId) {
       const section = document.getElementById(sectionId);
