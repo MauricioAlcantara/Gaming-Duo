@@ -2,7 +2,7 @@
   <div class="top-bar">
     <img src="/images/logo.png" alt="Logo" class="logo" @click="goToHome">
     <span class="site-name" @click="goToHome">Gaming Duo</span>
-    <nav>
+    <nav v-if="showNavigationButtons">
       <button @click="scrollToSection('quem-somos-section')">Sobre Nós</button>
       <button @click="goToRoute('help')">Ajuda</button>
       <button class="button-login" @click="goToRoute('login')">Entrar</button>
@@ -13,6 +13,12 @@
 
 <script>
 export default {
+  computed: {
+    showNavigationButtons() {
+      // Oculta os botões na tela de login ou cadastro
+      return !['login', 'cadastro'].includes(this.$route.name);
+    }
+  },
   methods: {
     goToHome() {
       if (this.$route.name === 'home') {
@@ -63,6 +69,7 @@ export default {
   font-size: 17px;
   font-weight: bold;
   color: #dcdcdc;
+  margin-right: auto;
 }
 
 nav {
