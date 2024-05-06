@@ -7,7 +7,7 @@
           <span v-if="showUsernameRequired" class="required">* </span>Usuário:
         </label>
         <input type="text" id="username" v-model="registerData.username" @input="clearErrors('username')"
-               :class="{'input-error': showUsernameRequired}">
+               :style="showUsernameRequired ? 'border-color: #f90404' : ''">
         <p v-if="showUsernameRequired" class="error-message">É necessário informar um usuário.</p>
       </div>
       <div class="form-group">
@@ -15,7 +15,7 @@
           <span v-if="showEmailRequired" class="required">* </span>E-mail:
         </label>
         <input type="email" id="email" v-model="registerData.email" @input="clearErrors('email')"
-               :class="{'input-error': showEmailRequired}">
+               :style="showEmailRequired ? 'border-color: #f90404' : ''">
         <p v-if="showEmailRequired" class="error-message">É necessário informar um e-mail válido.</p>
       </div>
       <div class="form-group">
@@ -23,7 +23,7 @@
           <span v-if="showPasswordRequired" class="required">* </span>Senha:
         </label>
         <input type="password" id="password" v-model="registerData.password" @input="clearErrors('password')"
-               :class="{'input-error': showPasswordRequired}">
+               :style="showPasswordRequired ? 'border-color: #f90404' : ''">
         <p v-if="showPasswordRequired" class="error-message">É necessário informar uma senha.</p>
       </div>
       <div class="form-group">
@@ -31,7 +31,7 @@
           <span v-if="showConfirmPasswordRequired" class="required">* </span>Confirmar Senha:
         </label>
         <input type="password" id="confirmPassword" v-model="registerData.confirmPassword" @input="clearErrors('confirmPassword')"
-               :class="{'input-error': showConfirmPasswordRequired}">
+               :style="showConfirmPasswordRequired ? 'border-color: #f90404' : ''">
         <p v-if="showConfirmPasswordRequired" class="error-message">As senhas não coincidem.</p>
       </div>
       <button type="submit" class="login-button">Cadastrar</button>

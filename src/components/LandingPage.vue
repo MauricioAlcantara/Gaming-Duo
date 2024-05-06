@@ -116,7 +116,7 @@ export default {
 h2 {
   font-size: 2.5rem;
   margin-bottom: 30px;
-  color: #D32F2F; /* Slightly softer red */
+  color: #D32F2F;
   position: relative;
 }
 
@@ -127,13 +127,13 @@ h2::before, h2::after {
   width: calc(100% - 40px);
   left: 20px;
   bottom: -20px;
-  background-color: #D32F2F; /* Matching the title color */
+  background-color: #D32F2F;
 }
 
 p, li {
   font-size: 1.2rem;
   line-height: 1.8;
-  color: #E0E0E0; /* Lighter grey for better readability */
+  color: #E0E0E0;
 }
 
 .jogos-populares-section {
