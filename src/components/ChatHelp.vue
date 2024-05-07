@@ -8,7 +8,6 @@
       </div>
     </div>
     <div class="chat-messages" v-show="!isMinimized">
-      <!-- Mensagens serão inseridas aqui -->
     </div>
     <div class="chat-input" v-show="!isMinimized">
       <input type="text" placeholder="Digite sua pergunta aqui..." v-model="message">
@@ -16,7 +15,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -47,10 +45,6 @@ export default {
 
 
 <style scoped>
-.chat-widget {
-
-}
-
 .chat-widget {
   position: fixed;
   bottom: 20px;
@@ -132,5 +126,4 @@ export default {
 .chat-input button:hover {
   background-color: #45a049;
 }
-
 </style>
