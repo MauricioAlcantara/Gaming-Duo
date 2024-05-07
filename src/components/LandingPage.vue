@@ -86,7 +86,7 @@ export default {
   justify-content: flex-end;
   min-height: 100vh;
   width: 100%;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, transparent 100%), url('@/assets/background-image.jpg');
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%), url('@/assets/background-image.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -100,11 +100,23 @@ export default {
   width: 100%;
 }
 
-.quem-somos-section, .jogos-populares-section {
+.jogos-populares-section, .quem-somos-section {
   background-color: #202020;
   color: #E0E0E0;
   padding: 50px 0;
   text-align: center;
+  position: relative;
+}
+
+.jogos-populares-section::before, .quem-somos-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+  z-index: -1;
 }
 
 .container {
@@ -138,12 +150,9 @@ p, li {
 
 .jogos-populares-section {
   background-color: #545454;
-  color: white;
-  padding: 50px 0;
-  text-align: center;
 }
 
-.jogos-populares-section .jogos-populares-cards {
+.jogos-populares-section .jogos-populares-cards, .quem-somos-section {
   display: flex;
   justify-content: center;
   align-items: flex-end;

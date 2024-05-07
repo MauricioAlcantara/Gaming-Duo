@@ -1,29 +1,41 @@
 <template>
   <div class="chat-widget" v-if="isOpen">
-    <div class="chat-header" @click="toggleChat">
-      Suporte
+    <div class="chat-header">
+      <span>Suporte</span>
+      <div class="controls">
+        <button @click="minimizeChat" class="chat-minimize">-</button>
+        <button @click="closeChat" class="chat-close">x</button>
+      </div>
     </div>
-    <div class="chat-messages">
-
+    <div class="chat-messages" v-show="!isMinimized">
+      <!-- Mensagens serão inseridas aqui -->
     </div>
-    <div class="chat-input">
+    <div class="chat-input" v-show="!isMinimized">
       <input type="text" placeholder="Digite sua pergunta aqui..." v-model="message">
       <button @click="sendMessage">Enviar</button>
     </div>
   </div>
 </template>
 
+
 <script>
 export default {
   data() {
     return {
-      isOpen: false,
+      isOpen: true,
+      isMinimized: false,
       message: ''
     };
   },
   methods: {
     toggleChat() {
       this.isOpen = !this.isOpen;
+    },
+    minimizeChat() {
+      this.isMinimized = !this.isMinimized;
+    },
+    closeChat() {
+      this.isOpen = false;
     },
     sendMessage() {
       console.log(this.message);
@@ -32,6 +44,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .chat-widget {
@@ -54,11 +67,38 @@ export default {
 }
 
 .chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #D32F2F;
   padding: 10px;
-  text-align: center;
+  color: white;
   font-size: 16px;
   font-weight: bold;
+}
+
+.chat-header span {
+  flex: 1;
+  text-align: center;
+}
+
+.controls {
+  display: flex;
+  min-width: 60px;
+}
+
+.chat-minimize, .chat-close {
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.chat-minimize:hover, .chat-close:hover {
+  color: #ccc;
 }
 
 .chat-messages {
