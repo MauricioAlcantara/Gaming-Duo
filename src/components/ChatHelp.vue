@@ -1,13 +1,14 @@
 <template>
   <div class="chat-widget" v-if="isOpen">
-    <div class="chat-header">
+    <div class="chat-header" @click="toggleMinimize">
       <span>Suporte</span>
       <div class="controls">
-        <button @click="minimizeChat" class="chat-minimize">-</button>
-        <button @click="closeChat" class="chat-close">x</button>
+        <button v-if="!isMinimized" @click.stop="minimizeChat" class="chat-minimize">-</button>
+        <button @click.stop="closeChat" class="chat-close">x</button>
       </div>
     </div>
     <div class="chat-messages" v-show="!isMinimized">
+      <!-- Mensagens aqui -->
     </div>
     <div class="chat-input" v-show="!isMinimized">
       <input type="text" placeholder="Digite sua pergunta aqui..." v-model="message">
@@ -20,7 +21,7 @@
 export default {
   data() {
     return {
-      isOpen: true,
+      isOpen: false,
       isMinimized: false,
       message: ''
     };
@@ -28,6 +29,14 @@ export default {
   methods: {
     toggleChat() {
       this.isOpen = !this.isOpen;
+      this.isMinimized = false;
+    },
+    toggleMinimize() {
+      if (this.isMinimized) {
+        this.isMinimized = false;
+      } else {
+        this.minimizeChat();
+      }
     },
     minimizeChat() {
       this.isMinimized = !this.isMinimized;
@@ -43,13 +52,12 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .chat-widget {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 300px;
+  width: 290px;
   background-color: #202020;
   color: #fff;
   border-radius: 8px;
@@ -69,16 +77,17 @@ export default {
   color: white;
   font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .chat-header span {
-  flex: 1;
   text-align: center;
 }
 
 .controls {
+  position: absolute;
+  right: 10px;
   display: flex;
-  min-width: 60px;
 }
 
 .chat-minimize, .chat-close {
@@ -87,8 +96,13 @@ export default {
   color: white;
   cursor: pointer;
   font-size: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
+  line-height: 1;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
 }
 
 .chat-minimize:hover, .chat-close:hover {
@@ -97,7 +111,7 @@ export default {
 
 .chat-messages {
   padding: 10px;
-  height: 200px;
+  height: 260px;
   overflow-y: auto;
 }
 
@@ -121,6 +135,7 @@ export default {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 15px;
 }
 
 .chat-input button:hover {

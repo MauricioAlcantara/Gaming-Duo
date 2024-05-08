@@ -86,7 +86,7 @@ export default {
   justify-content: flex-end;
   min-height: 100vh;
   width: 100%;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%), url('@/assets/background-image.jpg');
+  background-image: url('@/assets/background-image.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
