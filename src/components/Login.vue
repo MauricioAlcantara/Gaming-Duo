@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <form @submit.prevent="handleLogin" class="login-form">
-      <h1 class="welcome-text">Bem-vindo de Volta!</h1>
+      <h1 class="welcome-text">Bem-vindo de Volta! </h1>
       <div class="form-group">
         <label for="username">
           <span v-if="showUsernameRequired" class="required">* </span>E-mail:
