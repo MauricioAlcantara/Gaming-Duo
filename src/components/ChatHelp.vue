@@ -8,7 +8,14 @@
       </div>
     </div>
     <div class="chat-messages" v-show="!isMinimized">
-      <!-- Mensagens aqui -->
+      <ul>
+        <li v-for="(item, index) in predefinedMessages" :key="index" @click="sendPredefinedMessage(item.message)">
+          <span class="predefined-message">{{ item.label }}</span>
+        </li>
+      </ul>
+      <div v-for="(msg, index) in messages" :key="'msg-' + index" :class="{'user-message': msg.from === 'user', 'support-message': msg.from === 'support'}">
+        {{ msg.text }}
+      </div>
     </div>
     <div class="chat-input" v-show="!isMinimized">
       <input type="text" placeholder="Digite sua pergunta aqui..." v-model="message">
@@ -23,7 +30,18 @@ export default {
     return {
       isOpen: false,
       isMinimized: false,
-      message: ''
+      message: '',
+      messages: [],
+      predefinedMessages: [
+        {
+          label: "Como faço um cadastro?",
+          message: "Para se cadastrar, clique em 'Cadastrar-se' na barra superior. Preencha os campos solicitados, como nome de usuário, e-mail e senha. Confirme sua senha e clique em 'Cadastrar' para finalizar seu cadastro. Após isso, um e-mail de confirmação será enviado para o endereço de e-mail fornecido. Siga as instruções no e-mail para ativar sua conta."
+        },
+        {
+          label: "Ola?",
+          message: "Pdasddasdad clique em 'Cadastrar-se' na barra superior. Preencha os campos solicitados, como nome de usuário, e-mail e senha. Confirme sua senha e clique em 'Cadastrar' para finalizar seu cadastro. Após isso, um e-mail de confirmação será enviado para o endereço de e-mail fornecido. Siga as instruções no e-mail para ativar sua conta."
+        }
+      ]
     };
   },
   methods: {
@@ -43,10 +61,16 @@ export default {
     },
     closeChat() {
       this.isOpen = false;
+      this.messages = [];
     },
     sendMessage() {
-      console.log(this.message);
-      this.message = '';
+      if (this.message.trim()) {
+        this.messages.push({ text: this.message, from: 'user' });
+        this.message = '';
+      }
+    },
+    sendPredefinedMessage(text) {
+      this.messages.push({ text, from: 'support' });
     }
   }
 }
@@ -115,6 +139,21 @@ export default {
   overflow-y: auto;
 }
 
+.predefined-message {
+  border: 1px solid #f44336;
+  background-color: #444;
+  padding: 5px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
 .chat-input {
   padding: 10px;
   display: flex;
@@ -137,8 +176,25 @@ export default {
   cursor: pointer;
   font-size: 15px;
 }
-
 .chat-input button:hover {
   background-color: #45a049;
+}
+
+.user-message {
+  text-align: right;
+  margin: 5px;
+  background: #333;
+  padding: 5px;
+  border-radius: 4px;
+  color: white;
+}
+
+.support-message {
+  text-align: left;
+  margin: 5px;
+  background: #666;
+  padding: 5px;
+  border-radius: 4px;
+  color: white;
 }
 </style>
