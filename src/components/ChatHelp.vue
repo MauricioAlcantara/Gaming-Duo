@@ -36,10 +36,6 @@ export default {
         {
           label: "Como faço um cadastro?",
           message: "Para se cadastrar, clique em 'Cadastrar-se' na barra superior. Preencha os campos solicitados, como nome de usuário, e-mail e senha. Confirme sua senha e clique em 'Cadastrar' para finalizar seu cadastro. Após isso, um e-mail de confirmação será enviado para o endereço de e-mail fornecido. Siga as instruções no e-mail para ativar sua conta."
-        },
-        {
-          label: "Ola?",
-          message: "Pdasddasdad clique em 'Cadastrar-se' na barra superior. Preencha os campos solicitados, como nome de usuário, e-mail e senha. Confirme sua senha e clique em 'Cadastrar' para finalizar seu cadastro. Após isso, um e-mail de confirmação será enviado para o endereço de e-mail fornecido. Siga as instruções no e-mail para ativar sua conta."
         }
       ]
     };

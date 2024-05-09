@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'UserLogin',
   data() {
@@ -57,7 +59,16 @@ export default {
       this.showPasswordRequired = !this.loginData.password;
 
       if (!this.showUsernameRequired && !this.showPasswordRequired) {
-        console.log('Login attempt with:', this.loginData);
+        axios.post('http://127.0.0.1:8000/login', {
+          email: this.loginData.username,
+          senha: this.loginData.password
+        }).then(response => {
+          alert('Login bem-sucedido!');
+          console.log('Resposta do servidor:', response.data);
+        }).catch(error => {
+          alert('Falha no login!');
+          console.error('Erro:', error.response.data);
+        });
       }
     },
     clearErrors(field) {
@@ -67,16 +78,6 @@ export default {
       if (field === 'password' && this.loginData.password) {
         this.showPasswordRequired = false;
       }
-    },
-    toggleResetPasswordModal() {
-      this.showResetPasswordModal = !this.showResetPasswordModal;
-    },
-    sendResetLink() {
-      console.log('Enviar link de redefinição para:', this.resetEmail);
-      this.toggleResetPasswordModal();
-    },
-    goToRegister() {
-      this.$router.push({ name: 'cadastro' });
     }
   }
 }

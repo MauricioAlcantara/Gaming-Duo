@@ -64,8 +64,29 @@ export default {
       this.showConfirmPasswordRequired = this.registerData.password !== this.registerData.confirmPassword;
 
       if (!this.showUsernameRequired && !this.showEmailRequired && !this.showPasswordRequired && !this.showConfirmPasswordRequired) {
-        console.log('Register attempt with:', this.registerData);
-        alert('Enviamos um link de confirmação de registro para seu e-mail.');
+        fetch('http://127.0.0.1:8000/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: this.registerData.username,
+            email: this.registerData.email,
+            senha: this.registerData.password
+          })
+        })
+            .then(response => response.json())
+            .then(data => {
+              if (data.usuario) {
+                alert('Cadastro realizado com sucesso!');
+                // Aqui você pode redirecionar o usuário ou limpar o formulário
+              } else {
+                alert('Erro ao cadastrar usuário.');
+              }
+            })
+            .catch(error => {
+              console.error('Erro ao cadastrar:', error);
+            });
       }
     },
     clearErrors(field) {
