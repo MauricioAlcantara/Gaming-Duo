@@ -9,13 +9,11 @@
     </div>
     <div class="chat-messages" v-show="!isMinimized">
       <ul>
-        <li v-for="(item, index) in predefinedMessages" :key="index" @click="sendPredefinedMessage(item.message)">
-          <span class="predefined-message">{{ item.label }}</span>
+        <li v-for="(item, index) in predefinedMessages" :key="index">
+          <span class="predefined-message" @click="sendPredefinedMessage(index)">{{ item.label }}</span>
+          <div v-if="item.expanded" class="message-content">{{ item.message }}</div>
         </li>
       </ul>
-      <div v-for="(msg, index) in messages" :key="'msg-' + index" :class="{'user-message': msg.from === 'user', 'support-message': msg.from === 'support'}">
-        {{ msg.text }}
-      </div>
     </div>
     <div class="chat-input" v-show="!isMinimized">
       <input type="text" placeholder="Digite sua pergunta aqui..." v-model="message">
@@ -35,7 +33,28 @@ export default {
       predefinedMessages: [
         {
           label: "Como faço um cadastro?",
-          message: "Para se cadastrar, clique em 'Cadastrar-se' na barra superior. Preencha os campos solicitados, como nome de usuário, e-mail e senha. Confirme sua senha e clique em 'Cadastrar' para finalizar seu cadastro. Após isso, um e-mail de confirmação será enviado para o endereço de e-mail fornecido. Siga as instruções no e-mail para ativar sua conta."
+          message: "Para se cadastrar, clique em 'Cadastrar-se' na barra superior. Preencha os campos solicitados, como nome de usuário, e-mail e senha. Confirme sua senha e clique em 'Cadastrar' para finalizar seu cadastro. Após isso, um e-mail de confirmação será enviado para o endereço de e-mail fornecido. Siga as instruções no e-mail para ativar sua conta.",
+          expanded: false
+        },
+        {
+          label: "Esqueci minha senha, o que fazer?",
+          message: "Se você esqueceu sua senha, clique no link 'Esqueceu sua senha?' na página de login. Forneça o e-mail associado à sua conta e envie. Você receberá um e-mail com instruções para redefinir sua senha.",
+          expanded: false
+        },
+        {
+          label: "Como altero informações da minha conta?",
+          message: "Para alterar as informações da sua conta, acesse o painel de usuário e selecione 'Configurações'. Lá você pode editar seus dados pessoais, como nome de usuário e e-mail.",
+          expanded: false
+        },
+        {
+          label: "Não consigo acessar minha conta, o que fazer?",
+          message: "Se você está tendo problemas para acessar sua conta, certifique-se de que o e-mail e a senha estão corretos. Se o problema persistir, tente redefinir sua senha ou entre em contato com nosso suporte para mais assistência.",
+          expanded: false
+        },
+        {
+          label: "Preciso de suporte técnico, como proceder?",
+          message: "Se você está enfrentando problemas técnicos, por favor, descreva o problema detalhadamente através do nosso formulário de contato ou envie um e-mail diretamente para suporte@seudominio.com. Nossa equipe de suporte técnico entrará em contato o mais breve possível.",
+          expanded: false
         }
       ]
     };
@@ -65,8 +84,15 @@ export default {
         this.message = '';
       }
     },
-    sendPredefinedMessage(text) {
-      this.messages.push({ text, from: 'support' });
+    sendPredefinedMessage(index) {
+      // Alterna o estado de 'expanded' da pergunta clicada e fecha todas as outras
+      this.predefinedMessages.forEach((item, idx) => {
+        if (idx === index) {
+          item.expanded = !item.expanded; // Alterna o estado de 'expanded' da pergunta clicada
+        } else {
+          item.expanded = false; // Fecha todas as outras perguntas
+        }
+      });
     }
   }
 }
@@ -176,21 +202,12 @@ ul {
   background-color: #45a049;
 }
 
-.user-message {
-  text-align: right;
-  margin: 5px;
-  background: #333;
-  padding: 5px;
-  border-radius: 4px;
-  color: white;
-}
-
-.support-message {
-  text-align: left;
-  margin: 5px;
-  background: #666;
-  padding: 5px;
-  border-radius: 4px;
-  color: white;
+.message-content {
+  background-color:#666;
+  color:white;
+  padding:8px;
+  border-radius:4px;
+  margin-top:4px;
+  margin-bottom:12px;
 }
 </style>
