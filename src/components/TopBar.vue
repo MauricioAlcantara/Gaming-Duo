@@ -2,11 +2,15 @@
   <div class="top-bar">
     <img src="/images/logo.png" alt="Logo" class="logo" @click="goToHome">
     <span class="site-name" @click="goToHome">Gaming Duo</span>
-    <nav v-if="showNavigationButtons">
+    <nav v-if="!['dashboard', 'login', 'cadastro'].includes(this.$route.name)">
       <button @click="scrollToSection('quem-somos-section')">Sobre Nós</button>
       <button @click="$emit('toggle-chat')">Ajuda</button>
       <button class="button-login" @click="goToRoute('login')">Entrar</button>
       <button class="button-register" @click="goToRoute('cadastro')">Cadastrar-se</button>
+    </nav>
+    <nav v-else-if="this.$route.name === 'dashboard'">
+      <button @click="$emit('toggle-chat')">Ajuda</button>
+      <button class="button-profile" @click="goToProfile">Perfil</button>
     </nav>
   </div>
 </template>
@@ -37,6 +41,9 @@ export default {
       if (section) {
         section.scrollIntoView({ behavior: 'smooth' });
       }
+    },
+    goToProfile() {
+      this.$router.push({ name: 'profile' });
     }
   }
 }
@@ -93,7 +100,7 @@ nav button {
   box-shadow: 0 4px 8px rgba(0,0,0,0.5);
 }
 
-.button-login, .button-register {
+.button-login, .button-register, .button-profile {
   font-weight: bold;
 }
 
@@ -107,6 +114,11 @@ nav button {
   border-color: #f44336;
 }
 
+.button-profile {
+  background-color: #2196F3;
+  border-color: #2196F3;
+}
+
 nav button:hover {
   background-color: #555;
   border-color: #555;
@@ -118,5 +130,9 @@ nav button:hover {
 
 .button-register:hover {
   background-color: #d32f2f;
+}
+
+.button-profile:hover {
+  background-color: #1976D2;
 }
 </style>

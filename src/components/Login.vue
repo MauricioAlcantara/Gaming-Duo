@@ -37,8 +37,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'UserLogin',
   data() {
@@ -59,16 +57,8 @@ export default {
       this.showPasswordRequired = !this.loginData.password;
 
       if (!this.showUsernameRequired && !this.showPasswordRequired) {
-        axios.post('http://127.0.0.1:8000/login', {
-          email: this.loginData.username,
-          senha: this.loginData.password
-        }).then(response => {
-          alert('Login bem-sucedido!');
-          console.log('Resposta do servidor:', response.data);
-        }).catch(error => {
-          alert('Falha no login!');
-          console.error('Erro:', error.response.data);
-        });
+        // Simulando o sucesso do login e redirecionando para o dashboard
+        this.$router.push({ name: 'dashboard' });
       }
     },
     clearErrors(field) {
