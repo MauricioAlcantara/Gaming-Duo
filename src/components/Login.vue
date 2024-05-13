@@ -78,6 +78,16 @@ export default {
       if (field === 'password' && this.loginData.password) {
         this.showPasswordRequired = false;
       }
+    },
+    toggleResetPasswordModal() {
+      this.showResetPasswordModal = !this.showResetPasswordModal;
+    },
+    sendResetLink() {
+      console.log('Enviar link de redefinição para:', this.resetEmail);
+      this.toggleResetPasswordModal();
+    },
+    goToRegister() {
+      this.$router.push({ name: 'cadastro' });
     }
   }
 }

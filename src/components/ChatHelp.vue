@@ -77,6 +77,9 @@ export default {
     closeChat() {
       this.isOpen = false;
       this.messages = [];
+      this.predefinedMessages.forEach(msg => {
+        msg.expanded = false;
+      });
     },
     sendMessage() {
       if (this.message.trim()) {
