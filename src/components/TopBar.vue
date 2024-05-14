@@ -43,7 +43,7 @@ export default {
       }
     },
     goToProfile() {
-      this.$router.push({ name: 'profile' });
+      this.$router.push({ name: 'Profile' });
     }
   }
 }

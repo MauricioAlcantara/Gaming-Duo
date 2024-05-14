@@ -9,6 +9,9 @@
     "build-css": "tailwindcss build src/assets/styles.css -o dist/styles.css"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/vue-fontawesome": "^3.0.6",
     "aos": "^2.3.4",
     "axios": "^1.6.8",
     "core-js": "^3.8.3",
