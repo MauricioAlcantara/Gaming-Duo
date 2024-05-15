@@ -2,7 +2,8 @@
   <div class="modal-overlay" @click.self="close">
     <div class="modal-content">
       <h2>Editar Foto de Perfil</h2>
-      <input type="file" @change="uploadFile">
+      <input type="file" accept="image/png, image/jpeg" @change="uploadFile">
+      <p v-if="error" class="error-message">{{ error }}</p>
       <div class="button-group">
         <button @click="save">Salvar</button>
         <button @click="close">Cancelar</button>
@@ -16,7 +17,8 @@ export default {
   name: 'EditProfileModal',
   data() {
     return {
-      selectedFile: null
+      selectedFile: null,
+      error: ''
     };
   },
   methods: {
@@ -24,13 +26,24 @@ export default {
       this.$emit('close');
     },
     uploadFile(event) {
-      this.selectedFile = event.target.files[0];
+      const file = event.target.files[0];
+      if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+        this.selectedFile = file;
+        this.error = ''; // Limpa a mensagem de erro quando uma imagem é selecionada
+      } else {
+        this.selectedFile = null;
+        this.error = 'Por favor, selecione uma imagem PNG ou JPG';
+      }
     },
     save() {
-      if (this.selectedFile) {
+      if (!this.selectedFile) {
+        this.error = 'Nenhuma imagem selecionada';
+      } else {
         console.log('Saving file:', this.selectedFile);
+        // Emitir o evento 'save' com a imagem selecionada
+        this.$emit('save', this.selectedFile);
+        this.close();
       }
-      this.close();
     }
   }
 };
@@ -62,7 +75,14 @@ export default {
 }
 
 .modal-content input {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+}
+
+.error-message {
+  color: #f90404;
+  margin-bottom: 10px;
+  margin-top: 1px;
+  font-size: 14px;
 }
 
 .button-group {

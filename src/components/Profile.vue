@@ -9,7 +9,7 @@
         <p class="username">{{ user.username }}</p>
       </div>
     </div>
-    <edit-profile-modal v-if="isModalOpen" @close="isModalOpen = false" />
+    <edit-profile-modal v-if="isModalOpen" @close="isModalOpen = false" @save="updateAvatar" />
   </div>
 </template>
 
@@ -33,6 +33,10 @@ export default {
   methods: {
     openModal() {
       this.isModalOpen = true;
+    },
+    updateAvatar(file) {
+      // Cria uma URL temporária para mostrar a imagem selecionada
+      this.user.avatar = URL.createObjectURL(file);
     }
   }
 };
