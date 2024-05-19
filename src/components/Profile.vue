@@ -4,39 +4,58 @@
       <div class="profile-info">
         <div class="avatar-container">
           <img :src="user.avatar" alt="User Avatar" class="avatar">
-          <font-awesome-icon icon="edit" class="edit-icon" @click="openModal" />
+          <font-awesome-icon icon="edit" class="edit-icon" @click="openModal('avatar')" />
         </div>
-        <p class="username">{{ user.username }}</p>
+        <hr class="separator" />
+        <p class="username"><strong>Usuário:</strong> {{ user.username }}</p>
+        <p class="ranking"><strong>Ranking:</strong> {{ user.ranking }}</p>
+        <p class="preferred-agent">
+          <strong>Agente Preferido:&nbsp;</strong>{{ user.preferredAgent }}
+          <font-awesome-icon icon="edit" class="edit-icon-small" @click="openModal('preferredAgent')" />
+        </p>
       </div>
     </div>
-    <edit-profile-modal v-if="isModalOpen" @close="isModalOpen = false" @save="updateAvatar" />
+    <edit-profile-modal v-if="isAvatarModalOpen" @close="isAvatarModalOpen = false" @save="updateAvatar" />
+    <edit-preferred-agent-modal v-if="isAgentModalOpen" @close="isAgentModalOpen = false" @save="updatePreferredAgent" />
   </div>
 </template>
 
 <script>
 import EditProfileModal from './EditProfileModal.vue';
+import EditPreferredAgentModal from './EditPreferredAgentModal.vue';
 
 export default {
   name: 'UserProfile',
   components: {
-    EditProfileModal
+    EditProfileModal,
+    EditPreferredAgentModal
   },
   data() {
     return {
       user: {
-        username: 'johndoe',
-        avatar: '/path/to/avatar.jpg'
+        username: 'Dashe',
+        avatar: '/path/to/avatar.jpg',
+        ranking: 'Não Encontrado',
+        preferredAgent: 'Não Escolhido' // Inicialmente definido como "Não Escolhido"
       },
-      isModalOpen: false
+      isAvatarModalOpen: false,
+      isAgentModalOpen: false
     };
   },
   methods: {
-    openModal() {
-      this.isModalOpen = true;
+    openModal(type) {
+      if (type === 'avatar') {
+        this.isAvatarModalOpen = true;
+      } else if (type === 'preferredAgent') {
+        this.isAgentModalOpen = true;
+      }
     },
     updateAvatar(file) {
       // Cria uma URL temporária para mostrar a imagem selecionada
       this.user.avatar = URL.createObjectURL(file);
+    },
+    updatePreferredAgent(agent) {
+      this.user.preferredAgent = agent;
     }
   }
 };
@@ -98,10 +117,27 @@ export default {
   display: block;
 }
 
-.username {
+.separator {
+  width: 100%;
+  border: none;
+  border-top: 2px solid rgba(51, 51, 51, 0.95);
+  margin: 10px 0;
+}
+
+.username, .ranking, .preferred-agent {
   font-size: 18px;
-  font-weight: bold;
   margin-bottom: 10px;
-  text-align: center;
+  text-align: left;
+  width: 100%;
+}
+
+.preferred-agent {
+  display: flex;
+  align-items: center;
+}
+
+.edit-icon-small {
+  margin-left: 10px;
+  cursor: pointer;
 }
 </style>
