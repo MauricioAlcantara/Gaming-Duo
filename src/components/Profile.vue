@@ -7,39 +7,67 @@
           <font-awesome-icon icon="edit" class="edit-icon" @click="openModal('avatar')" />
         </div>
         <hr class="separator" />
-        <p class="username"><strong>Usuário:</strong> {{ user.username }}</p>
-        <p class="ranking"><strong>Ranking:</strong> {{ user.ranking }}</p>
-        <p class="preferred-agent">
-          <strong>Agente Preferido:&nbsp;</strong>{{ user.preferredAgent }}
-          <font-awesome-icon icon="edit" class="edit-icon-small" @click="openModal('preferredAgent')" />
-        </p>
+        <div class="info-item">
+          <p class="username"><strong>Usuário:</strong> {{ user.username }}</p>
+        </div>
+        <div class="info-item">
+          <p class="player"><strong>Jogador:</strong> {{ user.player }}</p>
+        </div>
+        <div class="info-item">
+          <p class="ranking"><strong>Ranking:</strong> {{ user.ranking }}</p>
+        </div>
+        <div class="info-item">
+          <p class="preferred-agent">
+            <strong>Agente Preferido:&nbsp;</strong>{{ user.preferredAgent }}
+            <font-awesome-icon icon="edit" class="edit-icon-small" @click="openModal('preferredAgent')" />
+          </p>
+        </div>
+        <div class="info-item">
+          <strong>Função Preferida:&nbsp;</strong>
+          <div class="select-container">
+            <select v-model="user.preferredFunction">
+              <option value="Não Escolhida">Não Escolhida</option>
+              <option value="Controlador">Controlador</option>
+              <option value="Duelista">Duelista</option>
+              <option value="Iniciador">Iniciador</option>
+              <option value="Sentinela">Sentinela</option>
+            </select>
+          </div>
+        </div>
+        <button class="connect-button" @click="openModal('connectValorant')">Conectar-se</button>
       </div>
     </div>
     <edit-profile-modal v-if="isAvatarModalOpen" @close="isAvatarModalOpen = false" @save="updateAvatar" />
     <edit-preferred-agent-modal v-if="isAgentModalOpen" @close="isAgentModalOpen = false" @save="updatePreferredAgent" />
+    <connect-valorant-modal v-if="isConnectModalOpen" @close="isConnectModalOpen = false" @connect="connectValorantAccount" />
   </div>
 </template>
 
 <script>
 import EditProfileModal from './EditProfileModal.vue';
 import EditPreferredAgentModal from './EditPreferredAgentModal.vue';
+import ConnectValorantModal from './ConnectValorantModal.vue';
 
 export default {
   name: 'UserProfile',
   components: {
     EditProfileModal,
-    EditPreferredAgentModal
+    EditPreferredAgentModal,
+    ConnectValorantModal
   },
   data() {
     return {
       user: {
         username: 'Dashe',
+        player: 'Não Encontrado',
         avatar: '/path/to/avatar.jpg',
         ranking: 'Não Encontrado',
-        preferredAgent: 'Não Escolhido' // Inicialmente definido como "Não Escolhido"
+        preferredAgent: 'Não Escolhido',
+        preferredFunction: 'Não Escolhida'
       },
       isAvatarModalOpen: false,
-      isAgentModalOpen: false
+      isAgentModalOpen: false,
+      isConnectModalOpen: false
     };
   },
   methods: {
@@ -48,14 +76,20 @@ export default {
         this.isAvatarModalOpen = true;
       } else if (type === 'preferredAgent') {
         this.isAgentModalOpen = true;
+      } else if (type === 'connectValorant') {
+        this.isConnectModalOpen = true;
       }
     },
     updateAvatar(file) {
-      // Cria uma URL temporária para mostrar a imagem selecionada
       this.user.avatar = URL.createObjectURL(file);
     },
     updatePreferredAgent(agent) {
       this.user.preferredAgent = agent;
+    },
+    connectValorantAccount(account) {
+      // Lógica para conectar a conta do Valorant
+      console.log('Conectando conta do Valorant:', account);
+      this.isConnectModalOpen = false;
     }
   }
 };
@@ -124,11 +158,14 @@ export default {
   margin: 10px 0;
 }
 
-.username, .ranking, .preferred-agent {
-  font-size: 18px;
-  margin-bottom: 10px;
-  text-align: left;
+.info-item {
   width: 100%;
+  padding: 5px 0; /* Reduzido o padding vertical para 5px */
+}
+
+.username, .player, .ranking, .preferred-agent, .preferred-function {
+  font-size: 18px;
+  text-align: left;
 }
 
 .preferred-agent {
@@ -139,5 +176,56 @@ export default {
 .edit-icon-small {
   margin-left: 10px;
   cursor: pointer;
+}
+
+.select-container {
+  display: inline-block;
+  position: relative;
+}
+
+select {
+  appearance: none;
+  background-color: #171717;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 5px;
+  padding: 5px 30px 5px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  margin-left: 10px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+select:hover {
+  background-color: #222;
+}
+
+.select-container::after {
+  content: '▼';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #fff;
+  font-size: 12px;
+}
+
+.connect-button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background-color: #f90404;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  align-self: flex-end;
+}
+
+.connect-button:hover {
+  background-color: #d32f2f;
 }
 </style>
