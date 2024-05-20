@@ -37,7 +37,7 @@ export default {
         { name: 'SKYE', image: '/images/skye.png' },
         { name: 'YORU', image: '/images/yoru.png' },
         { name: 'ASTRA', image: '/images/astra.png' },
-        { name: 'KAY/O', image: '/images/kay:o.png' },
+        { name: 'KAY/O', image: '/images/kayo.png' },
         { name: 'CHAMBER', image: '/images/chamber.png' },
         { name: 'NEON', image: '/images/neon.png' },
         { name: 'FADE', image: '/images/fade.png' },
