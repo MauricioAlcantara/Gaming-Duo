@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import UserDashboard from "@/components/Dashboard.vue";
 import LandingPage from '../components/LandingPage.vue';
 import UserLogin from "@/components/Login.vue";
-import Cadastro from "@/components/Cadastro.vue";
+import CadastroForm from "@/components/Cadastro.vue";
 import UserProfile from '../components/Profile.vue';
 
 const router = createRouter({
@@ -21,7 +21,7 @@ const router = createRouter({
         {
             path: '/cadastro',
             name: 'cadastro',
-            component: Cadastro
+            component: CadastroForm
         },
         {
             path: '/dashboard',

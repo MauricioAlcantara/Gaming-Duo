@@ -40,8 +40,10 @@
 </template>
 
 <script>
+import { register } from '@/api';
+
 export default {
-  name: 'UserRegister',
+  name: 'CadastroForm',
   data() {
     return {
       registerData: {
@@ -57,36 +59,29 @@ export default {
     };
   },
   methods: {
-    handleRegister() {
+    async handleRegister() {  // Adicione a palavra-chave async
       this.showUsernameRequired = !this.registerData.username;
       this.showEmailRequired = !this.registerData.email;
       this.showPasswordRequired = !this.registerData.password;
       this.showConfirmPasswordRequired = this.registerData.password !== this.registerData.confirmPassword;
 
       if (!this.showUsernameRequired && !this.showEmailRequired && !this.showPasswordRequired && !this.showConfirmPasswordRequired) {
-        fetch('http://127.0.0.1:8000/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
+        try {
+          const response = await register({
             username: this.registerData.username,
             email: this.registerData.email,
             senha: this.registerData.password
-          })
-        })
-            .then(response => response.json())
-            .then(data => {
-              if (data.usuario) {
-                alert('Cadastro realizado com sucesso!');
-                // Aqui você pode redirecionar o usuário ou limpar o formulário
-              } else {
-                alert('Erro ao cadastrar usuário.');
-              }
-            })
-            .catch(error => {
-              console.error('Erro ao cadastrar:', error);
-            });
+          });
+
+          if (response.data.usuario) {
+            alert('Cadastro realizado com sucesso!');
+
+          } else {
+            alert('Erro ao cadastrar usuário.');
+          }
+        } catch (error) {
+          console.error('Erro ao cadastrar:', error);
+        }
       }
     },
     clearErrors(field) {
