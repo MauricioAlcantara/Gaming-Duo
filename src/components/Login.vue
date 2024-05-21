@@ -1,14 +1,14 @@
 <template>
   <div class="login-container">
     <form @submit.prevent="handleLogin" class="login-form">
-      <h1 class="welcome-text">Bem-vindo de Volta! </h1>
+      <h1 class="welcome-text">Bem-vindo de Volta!</h1>
       <div class="form-group">
-        <label for="username">
-          <span v-if="showUsernameRequired" class="required">* </span>E-mail:
+        <label for="email">
+          <span v-if="showEmailRequired" class="required">* </span>E-mail:
         </label>
-        <input type="text" id="username" v-model="loginData.username" @input="clearErrors('username')"
-               :style="showUsernameRequired ? 'border-color: #f90404' : ''">
-        <p v-if="showUsernameRequired" class="error-message">É necessário informar um e-mail.</p>
+        <input type="email" id="email" v-model="loginData.email" @input="clearErrors('email')"
+               :style="showEmailRequired ? 'border-color: #f90404' : ''">
+        <p v-if="showEmailRequired" class="error-message">É necessário informar um e-mail.</p>
       </div>
       <div class="form-group">
         <label for="password">
@@ -37,33 +37,52 @@
 </template>
 
 <script>
+import { login } from '@/api';  // Certifique-se de importar a função de login do api.js
+
 export default {
   name: 'UserLogin',
   data() {
     return {
       loginData: {
-        username: '',
+        email: '',
         password: ''
       },
-      showUsernameRequired: false,
+      showEmailRequired: false,
       showPasswordRequired: false,
       showResetPasswordModal: false,
       resetEmail: ''
     };
   },
   methods: {
-    handleLogin() {
-      this.showUsernameRequired = !this.loginData.username;
+    async handleLogin() {
+      this.showEmailRequired = !this.loginData.email;
       this.showPasswordRequired = !this.loginData.password;
 
-      if (!this.showUsernameRequired && !this.showPasswordRequired) {
-        // Simulando o sucesso do login e redirecionando para o dashboard
-        this.$router.push({ name: 'dashboard' });
+      if (!this.showEmailRequired && !this.showPasswordRequired) {
+        try {
+          const response = await login({
+            email: this.loginData.email,
+            senha: this.loginData.password
+          });
+
+
+          if (response.data.success) {
+            alert('Login realizado com sucesso!');
+
+            localStorage.setItem('token', response.data.token);
+            this.$router.push({ name: 'dashboard' });
+          } else {
+            alert('Erro ao fazer login. Verifique suas credenciais.');
+          }
+        } catch (error) {
+          console.error('Erro ao fazer login:', error);
+          alert('Erro ao fazer login. Por favor, tente novamente mais tarde.');
+        }
       }
     },
     clearErrors(field) {
-      if (field === 'username' && this.loginData.username) {
-        this.showUsernameRequired = false;
+      if (field === 'email' && this.loginData.email) {
+        this.showEmailRequired = false;
       }
       if (field === 'password' && this.loginData.password) {
         this.showPasswordRequired = false;
@@ -95,7 +114,7 @@ export default {
 
 .login-form {
   width: 100%;
-  max-width: 310px;
+  max-width: 350px;
   padding: 20px 40px 40px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   background: #171717;
@@ -130,7 +149,7 @@ export default {
 }
 
 .form-group {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 label {
@@ -183,26 +202,16 @@ label {
   color: red;
 }
 
-input[type="email"] {
+input[type="email"], input[type="password"] {
   width: 100%;
   padding: 10px;
-  margin-top: 20px;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: 1px solid #4c4c4c;
+  background-color: #212121;
+  color: #fff;
   box-sizing: border-box;
   font-size: 15px;
   outline: none;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 20px;
-  background-color: #f90404;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
 }
 
 .required {
