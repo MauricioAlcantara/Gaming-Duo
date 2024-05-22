@@ -29,14 +29,14 @@
         <h2 class="section-title">Jogos Populares</h2>
         <div class="jogos-populares-cards">
           <CustomCard
-              title="Valorant"
-              imgUrl="/images/image-valorant.jpg"
-              cardClass="large"
-          />
-          <CustomCard
               title="CS2"
               imgUrl="/images/image-cs2.jpg"
               cardClass="medium"
+          />
+          <CustomCard
+              title="Valorant"
+              imgUrl="/images/image-valorant.jpg"
+              cardClass="large"
           />
           <CustomCard
               title="PUBG"
@@ -91,6 +91,17 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
   padding-bottom: 5vh;
+  position: relative;
+}
+
+.main-section::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(32, 32, 32, 0.8) 80%, #202020 100%);
 }
 
 .cards-container {
@@ -115,7 +126,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.9) 80%, #202020 100%);
   z-index: -1;
 }
 
@@ -128,7 +139,7 @@ export default {
 h2 {
   font-size: 2.5rem;
   margin-bottom: 30px;
-  color: #D32F2F;
+  color: #f90404;
   position: relative;
 }
 
@@ -139,7 +150,7 @@ h2::before, h2::after {
   width: calc(100% - 40px);
   left: 20px;
   bottom: -20px;
-  background-color: #D32F2F;
+  background-color: #f90404;
 }
 
 p, li {
@@ -148,13 +159,13 @@ p, li {
   color: #E0E0E0;
 }
 
-.jogos-populares-section {
-  background-color: #545454;
-}
-
 .jogos-populares-section .jogos-populares-cards, .quem-somos-section {
   display: flex;
   justify-content: center;
   align-items: flex-end;
+}
+
+.section-title {
+  margin-bottom: 100px;
 }
 </style>

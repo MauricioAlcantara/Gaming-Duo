@@ -52,7 +52,7 @@ export default {
 
 .card.large {
   height: 350px;
-  border-color: #ffd700;
+  border-color: #c0c0c0;
 }
 
 .card.medium {
@@ -62,7 +62,7 @@ export default {
 
 .card.small {
   height: 300px;
-  border-color: #cd7f32;
+  border-color: #c0c0c0;
 }
 
 .card:hover {

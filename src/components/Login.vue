@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { login } from '@/api';  // Certifique-se de importar a função de login do api.js
+import { login } from '@/api';
 
 export default {
   name: 'UserLogin',

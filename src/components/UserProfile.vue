@@ -86,10 +86,9 @@ export default {
     updatePreferredAgent(agent) {
       this.user.preferredAgent = agent;
     },
-    connectValorantAccount(account) {
-      // Lógica para conectar a conta do Valorant
-      console.log('Conectando conta do Valorant:', account);
-      this.isConnectModalOpen = false;
+    connectValorantAccount(player) {
+      this.user.player = player.name;
+      this.user.ranking = player.rank;
     }
   }
 };
@@ -160,7 +159,7 @@ export default {
 
 .info-item {
   width: 100%;
-  padding: 5px 0; /* Reduzido o padding vertical para 5px */
+  padding: 5px 0;
 }
 
 .username, .player, .ranking, .preferred-agent, .preferred-function {

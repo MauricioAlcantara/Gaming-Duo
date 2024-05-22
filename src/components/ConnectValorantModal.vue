@@ -2,7 +2,8 @@
   <div class="modal-overlay" @click.self="close">
     <div class="modal-content">
       <h2>Conectar Conta do Valorant</h2>
-      <input type="text" v-model="valorantAccount" placeholder="Digite o ID da conta do Valorant">
+      <input v-model="nickname" placeholder="Nickname#Tag" />
+      <p v-if="error" class="error-message">{{ error }}</p>
       <div class="button-group">
         <button @click="connect">Conectar</button>
         <button @click="close">Cancelar</button>
@@ -13,20 +14,44 @@
 
 <script>
 export default {
-  name: 'ConnectValorantModal',
   data() {
     return {
-      valorantAccount: ''
+      nickname: '',
+      error: ''
     };
   },
   methods: {
     close() {
       this.$emit('close');
     },
-    connect() {
-      if (this.valorantAccount) {
-        this.$emit('connect', this.valorantAccount);
-        this.close();
+    async connect() {
+      if (!this.nickname.includes('#')) {
+        this.error = 'Formato inválido. Use o formato Nickname#Tag.';
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://public-api.tracker.gg/v2/valorant/standard/profile/riot/${this.nickname.replace('#', '%23')}`, {
+          headers: {
+            'TRN-Api-Key': '406e8c2a-11f3-4fa6-bc53-547695ee13be'
+          }
+        });
+        const data = await response.json();
+
+        if (response.ok) {
+          const player = {
+            name: data.data.platformInfo.platformUserHandle,
+            rank: data.data.segments[0].stats.rank.metadata.tierName
+          };
+          this.$emit('connect', player);
+          this.close();
+        } else {
+          console.log('API response:', data);
+          this.error = data.errors ? data.errors[0].message : 'Erro ao conectar.';
+        }
+      } catch (error) {
+        console.error('Connection error:', error);
+        this.error = 'Erro ao conectar. Tente novamente.';
       }
     }
   }
@@ -68,6 +93,11 @@ export default {
   width: 100%;
 }
 
+.error-message {
+  color: #f90404;
+  margin-bottom: 10px;
+}
+
 .button-group {
   display: flex;
   gap: 10px;
@@ -79,8 +109,9 @@ export default {
   padding: 10px 20px;
   border: none;
   cursor: pointer;
+  width: 100px;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 12px;
   transition: background-color 0.3s ease;
 }
 

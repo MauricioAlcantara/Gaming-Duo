@@ -3,7 +3,7 @@ import UserDashboard from "@/components/Dashboard.vue";
 import LandingPage from '../components/LandingPage.vue';
 import UserLogin from "@/components/Login.vue";
 import CadastroForm from "@/components/Cadastro.vue";
-import UserProfile from '../components/Profile.vue';
+import UserProfile from '@/components/UserProfile.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -30,7 +30,7 @@ const router = createRouter({
         },
         {
             path: '/profile',
-            name: 'Profile',
+            name: 'UserProfile',
             component: UserProfile
         },
     ]
