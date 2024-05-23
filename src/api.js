@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 const api = axios.create({
     baseURL: 'http://localhost:8000/api',
     headers: {
@@ -8,25 +7,21 @@ const api = axios.create({
     }
 });
 
-
 export const register = (userData) => {
     return api.post('/register', userData);
 };
-
 
 export const login = (credentials) => {
     return api.post('/login', credentials);
 };
 
-
-export const getUser = (id, token) => {
-    return api.get(`/usuario/${id}`, {
+export const getUser = (token) => {
+    return api.get('/usuario', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
     });
 };
-
 
 export const updateUser = (id, userData, token) => {
     return api.put(`/usuario/${id}`, userData, {

@@ -47,6 +47,7 @@
 import EditProfileModal from './EditProfileModal.vue';
 import EditPreferredAgentModal from './EditPreferredAgentModal.vue';
 import ConnectValorantModal from './ConnectValorantModal.vue';
+import { getUser } from '@/api';
 
 export default {
   name: 'UserProfile',
@@ -58,7 +59,7 @@ export default {
   data() {
     return {
       user: {
-        username: 'Dashe',
+        username: '',
         player: 'Não Encontrado',
         avatar: '/path/to/avatar.jpg',
         ranking: 'Não Encontrado',
@@ -70,7 +71,32 @@ export default {
       isConnectModalOpen: false
     };
   },
+  created() {
+    this.fetchUserData();
+  },
   methods: {
+    async fetchUserData() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await getUser(token);
+          const userData = response.data.usuario;
+
+          this.user = {
+            username: userData.username,
+            player: userData.player || 'Não Encontrado',
+            avatar: userData.avatar || '/path/to/avatar.jpg',
+            ranking: userData.ranking || 'Não Encontrado',
+            preferredAgent: userData.preferredAgent || 'Não Escolhido',
+            preferredFunction: userData.preferredFunction || 'Não Escolhida'
+          };
+        } catch (error) {
+          console.error('Erro ao buscar dados do usuário:', error);
+        }
+      } else {
+        this.$router.push({ name: 'login' });
+      }
+    },
     openModal(type) {
       if (type === 'avatar') {
         this.isAvatarModalOpen = true;

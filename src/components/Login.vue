@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { login } from '@/api';
+import { login } from '@/api';  // Certifique-se de importar a função de login do api.js
 
 export default {
   name: 'UserLogin',
@@ -68,7 +68,6 @@ export default {
 
           if (response.data.success) {
             alert('Login realizado com sucesso!');
-
             localStorage.setItem('token', response.data.token);
             this.$router.push({ name: 'dashboard' });
           } else {
