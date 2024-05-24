@@ -6,10 +6,8 @@
           <img :src="user.avatar" alt="User Avatar" class="avatar">
           <font-awesome-icon icon="edit" class="edit-icon" @click="openModal('avatar')" />
         </div>
+        <p class="username">{{ user.username }}</p>
         <hr class="separator" />
-        <div class="info-item">
-          <p class="username"><strong>Usuário:</strong> {{ user.username }}</p>
-        </div>
         <div class="info-item">
           <p class="player"><strong>Jogador:</strong> {{ user.player }}</p>
         </div>
@@ -148,20 +146,28 @@ export default {
 
 .avatar-container {
   position: relative;
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .avatar {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border: 2px solid #f90404;
+}
+
+.username {
+  font-size: 18px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .edit-icon {
   position: absolute;
-  top: 41%;
+  top: 48%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: #fff;
