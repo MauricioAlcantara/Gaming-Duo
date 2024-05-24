@@ -40,4 +40,14 @@ export const deleteUser = (id, token) => {
     });
 };
 
+export const updateAvatar = (formData, token) => {
+    return api.post('/usuario/avatar', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+};
+
+
 export default api;

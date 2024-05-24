@@ -3,7 +3,7 @@
     <div class="profile-container">
       <div class="profile-info">
         <div class="avatar-container">
-          <img :src="user.avatar" alt="User Avatar" class="avatar">
+          <img :src="user.avatar ? user.avatar : '/path/to/default/avatar.jpg'" alt="User Avatar" class="avatar">
           <font-awesome-icon icon="edit" class="edit-icon" @click="openModal('avatar')" />
         </div>
         <p class="username">{{ user.username }}</p>
@@ -45,7 +45,7 @@
 import EditProfileModal from './EditProfileModal.vue';
 import EditPreferredAgentModal from './EditPreferredAgentModal.vue';
 import ConnectValorantModal from './ConnectValorantModal.vue';
-import { getUser } from '@/api';
+import { getUser, updateAvatar } from '@/api';
 
 export default {
   name: 'UserProfile',
@@ -59,7 +59,7 @@ export default {
       user: {
         username: '',
         player: 'Não Encontrado',
-        avatar: '/path/to/avatar.jpg',
+        avatar: '/path/to/default/avatar.jpg',
         ranking: 'Não Encontrado',
         preferredAgent: 'Não Escolhido',
         preferredFunction: 'Não Escolhida'
@@ -83,7 +83,7 @@ export default {
           this.user = {
             username: userData.username,
             player: userData.player || 'Não Encontrado',
-            avatar: userData.avatar || '/path/to/avatar.jpg',
+            avatar: userData.avatar ? `http://localhost:8000/avatars/${userData.avatar}` : '/path/to/default/avatar.jpg',
             ranking: userData.ranking || 'Não Encontrado',
             preferredAgent: userData.preferredAgent || 'Não Escolhido',
             preferredFunction: userData.preferredFunction || 'Não Escolhida'
@@ -104,8 +104,24 @@ export default {
         this.isConnectModalOpen = true;
       }
     },
-    updateAvatar(file) {
-      this.user.avatar = URL.createObjectURL(file);
+    async updateAvatar(file) {
+      const token = localStorage.getItem('token');
+      if (file) {
+        try {
+          const formData = new FormData();
+          formData.append('avatar', file);
+
+          const response = await updateAvatar(formData, token);
+          if (response.data.success) {
+            this.user.avatar = response.data.avatar_url;
+            this.isAvatarModalOpen = false;
+          } else {
+            alert('Erro ao fazer upload do avatar.');
+          }
+        } catch (error) {
+          console.error('Erro ao fazer upload do avatar:', error);
+        }
+      }
     },
     updatePreferredAgent(agent) {
       this.user.preferredAgent = agent;
