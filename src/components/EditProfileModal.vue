@@ -8,11 +8,11 @@
           <input type="email" v-model="email" id="email" required />
         </div>
         <div class="form-group">
-          <label for="password">Senha:</label>
+          <label for="password">Nova Senha:</label>
           <input type="password" v-model="password" id="password" required />
         </div>
         <div class="form-group">
-          <label for="confirmPassword">Confirmar Senha:</label>
+          <label for="confirmPassword">Confirmar Nova Senha:</label>
           <input type="password" v-model="confirmPassword" id="confirmPassword" required />
         </div>
         <div class="button-group">
