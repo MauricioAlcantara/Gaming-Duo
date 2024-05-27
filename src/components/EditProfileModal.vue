@@ -1,13 +1,25 @@
 <template>
   <div class="modal-overlay" @click.self="close">
     <div class="modal-content">
-      <h2>Editar Foto de Perfil</h2>
-      <input type="file" accept="image/png, image/jpeg" @change="uploadFile">
-      <p v-if="error" class="error-message">{{ error }}</p>
-      <div class="button-group">
-        <button @click="save">Salvar</button>
-        <button @click="close">Cancelar</button>
-      </div>
+      <h2 class="modal-title">Editar Perfil</h2>
+      <form @submit.prevent="save">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" v-model="email" id="email" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Senha:</label>
+          <input type="password" v-model="password" id="password" required />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Senha:</label>
+          <input type="password" v-model="confirmPassword" id="confirmPassword" required />
+        </div>
+        <div class="button-group">
+          <button type="submit">Salvar</button>
+          <button type="button" @click="close">Cancelar</button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -15,35 +27,30 @@
 <script>
 export default {
   name: 'EditProfileModal',
+  props: {
+    user: Object
+  },
   data() {
     return {
-      selectedFile: null,
-      error: ''
+      email: this.user.email,
+      password: '',
+      confirmPassword: ''
     };
   },
   methods: {
     close() {
       this.$emit('close');
     },
-    uploadFile(event) {
-      const file = event.target.files[0];
-      if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
-        this.selectedFile = file;
-        this.error = ''; // Limpa a mensagem de erro quando uma imagem é selecionada
-      } else {
-        this.selectedFile = null;
-        this.error = 'Por favor, selecione uma imagem PNG ou JPG';
-      }
-    },
     save() {
-      if (!this.selectedFile) {
-        this.error = 'Nenhuma imagem selecionada';
-      } else {
-        console.log('Saving file:', this.selectedFile);
-        // Emitir o evento 'save' com a imagem selecionada
-        this.$emit('save', this.selectedFile);
-        this.close();
+      if (this.password !== this.confirmPassword) {
+        alert('As senhas não coincidem.');
+        return;
       }
+      const updatedUser = {
+        email: this.email,
+        password: this.password
+      };
+      this.$emit('save', updatedUser);
     }
   }
 };
@@ -69,52 +76,60 @@ export default {
   color: #fff;
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 90%;
-  max-width: 300px;
+  max-width: 400px;
 }
 
-.modal-content input {
-  margin-bottom: 10px;
+.modal-title {
+  text-align: center;
 }
 
-.error-message {
-  color: #f90404;
-  margin-bottom: 10px;
-  margin-top: 1px;
-  font-size: 14px;
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 94%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  background-color: #222;
+  color: #fff;
 }
 
 .button-group {
   display: flex;
   gap: 10px;
-  width: 100%;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .modal-content button {
   padding: 10px 20px;
+  font-size: 13px;
   border: none;
   cursor: pointer;
-  width: 100px;
   border-radius: 5px;
-  font-size: 12px;
   transition: background-color 0.3s ease;
 }
 
-.modal-content button:first-of-type {
+.modal-content button[type="submit"] {
   background-color: #4caf50;
 }
 
-.modal-content button:first-of-type:hover {
+.modal-content button[type="submit"]:hover {
   background-color: #45a049;
 }
 
-.modal-content button:last-of-type {
+.modal-content button[type="button"] {
   background-color: #f44336;
 }
 
-.modal-content button:last-of-type:hover {
+.modal-content button[type="button"]:hover {
   background-color: #d32f2f;
 }
 </style>

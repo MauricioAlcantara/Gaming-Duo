@@ -2,6 +2,9 @@
   <div class="profile">
     <div class="profile-container">
       <div class="profile-info">
+        <div class="edit-icon-container">
+          <font-awesome-icon icon="edit" class="edit-icon-top" @click="openModal('editProfile')" />
+        </div>
         <div class="avatar-container">
           <img :src="user.avatar ? user.avatar : '/path/to/default/avatar.jpg'" alt="User Avatar" class="avatar">
           <font-awesome-icon icon="edit" class="edit-icon" @click="openModal('avatar')" />
@@ -35,7 +38,8 @@
         <button class="connect-button" @click="openModal('connectValorant')">Conectar-se</button>
       </div>
     </div>
-    <edit-profile-modal v-if="isAvatarModalOpen" @close="isAvatarModalOpen = false" @save="updateAvatar" />
+    <edit-profile-modal v-if="isProfileModalOpen" :user="user" @close="isProfileModalOpen = false" @save="updateProfile" />
+    <edit-profile-image-modal v-if="isAvatarModalOpen" @close="isAvatarModalOpen = false" @save="updateAvatar" />
     <edit-preferred-agent-modal v-if="isAgentModalOpen" @close="isAgentModalOpen = false" @save="updatePreferredAgent" />
     <connect-valorant-modal v-if="isConnectModalOpen" @close="isConnectModalOpen = false" @connect="connectValorantAccount" />
   </div>
@@ -43,6 +47,7 @@
 
 <script>
 import EditProfileModal from './EditProfileModal.vue';
+import EditProfileImageModal from './EditImageProfileModal.vue';
 import EditPreferredAgentModal from './EditPreferredAgentModal.vue';
 import ConnectValorantModal from './ConnectValorantModal.vue';
 import { getUser, updateAvatar } from '@/api';
@@ -51,6 +56,7 @@ export default {
   name: 'UserProfile',
   components: {
     EditProfileModal,
+    EditProfileImageModal,
     EditPreferredAgentModal,
     ConnectValorantModal
   },
@@ -64,6 +70,7 @@ export default {
         preferredAgent: 'Não Escolhido',
         preferredFunction: 'Não Escolhida'
       },
+      isProfileModalOpen: false,
       isAvatarModalOpen: false,
       isAgentModalOpen: false,
       isConnectModalOpen: false
@@ -96,7 +103,9 @@ export default {
       }
     },
     openModal(type) {
-      if (type === 'avatar') {
+      if (type === 'editProfile') {
+        this.isProfileModalOpen = true;
+      } else if (type === 'avatar') {
         this.isAvatarModalOpen = true;
       } else if (type === 'preferredAgent') {
         this.isAgentModalOpen = true;
@@ -126,6 +135,12 @@ export default {
     updatePreferredAgent(agent) {
       this.user.preferredAgent = agent;
     },
+    updateProfile(updatedUser) {
+      // Atualize o e-mail e a senha do usuário
+      this.user.email = updatedUser.email;
+      // Adicione a lógica para atualizar a senha no backend, se necessário
+      console.log('Senha atualizada:', updatedUser.password);
+    },
     connectValorantAccount(player) {
       this.user.player = player.name;
       this.user.ranking = player.rank;
@@ -152,12 +167,25 @@ export default {
   width: 100%;
   max-width: 600px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
 .profile-info {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.edit-icon-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.edit-icon-top {
+  color: #fff;
+  padding: 5px;
+  cursor: pointer;
 }
 
 .avatar-container {
@@ -276,3 +304,4 @@ select:hover {
   background-color: #d32f2f;
 }
 </style>
+
