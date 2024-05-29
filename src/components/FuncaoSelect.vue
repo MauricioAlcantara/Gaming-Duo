@@ -6,7 +6,7 @@
       @click.stop
   >
     <div class="selected-option">
-      <img :src="selectedOption.image" class="ranking-icon" v-if="selectedOption.image" />
+      <img :src="selectedOption.image" class="role-icon" v-if="selectedOption.image" />
       {{ selectedOption.text }}
     </div>
     <div class="dropdown" v-if="dropdownOpen">
@@ -17,7 +17,7 @@
           @click="selectOption(option)"
           :class="{ 'even': index % 2 === 0, 'odd': index % 2 !== 0, 'selected': option.value === selectedOption.value }"
       >
-        <img :src="option.image" class="ranking-icon" v-if="option.image" />
+        <img :src="option.image" class="role-icon" v-if="option.image" />
         {{ option.text }}
       </div>
     </div>
@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: 'RankingSelect',
+  name: 'FuncaoSelect',
   props: {
     options: Array,
     modelValue: String
@@ -68,7 +68,7 @@ export default {
       } else {
         this.$emit('update:modelValue', option.value);
       }
-      this.dropdownOpen = false;
+      this.dropdownOpen = false; // Fechar dropdown ao selecionar opção
     }
   }
 };
@@ -135,8 +135,8 @@ export default {
   background-color: #555;
 }
 
-.ranking-icon {
-  width: 18px;
+.role-icon {
+  width: 20px;
   height: 20px;
   margin-right: 6px;
 }

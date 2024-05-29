@@ -15,15 +15,7 @@
       </div>
       <div class="filter">
         <label for="role">Função</label>
-        <div class="custom-select">
-          <select id="role" v-model="filters.role">
-            <option value="Não Selecionado">Não Selecionado</option>
-            <option value="Controlador">Controlador</option>
-            <option value="Duelista">Duelista</option>
-            <option value="Iniciador">Iniciador</option>
-            <option value="Sentinela">Sentinela</option>
-          </select>
-        </div>
+        <FuncaoSelect :options="roles" v-model="filters.role" />
       </div>
       <button @click="searchDuos">Buscar</button>
     </div>
@@ -33,11 +25,13 @@
 <script>
 import { getUser } from '@/api';
 import RankingSelect from './RankingSelect.vue';
+import FuncaoSelect from './FuncaoSelect.vue';
 
 export default {
   name: 'UserDashboard',
   components: {
-    RankingSelect
+    RankingSelect,
+    FuncaoSelect
   },
   data() {
     return {
@@ -74,6 +68,13 @@ export default {
         { value: 'Imortal II', text: 'Imortal II', image: '/images/Imortal2.png' },
         { value: 'Imortal III', text: 'Imortal III', image: '/images/Imortal3.png' },
         { value: 'Radiante', text: 'Radiante', image: '/images/Radiante.png' },
+      ],
+      roles: [
+        { value: 'Não Selecionado', text: 'Não Selecionado', image: '' },
+        { value: 'Controlador', text: 'Controlador', image: '/images/IconControlador.png' },
+        { value: 'Duelista', text: 'Duelista', image: '/images/IconDuelista.png' },
+        { value: 'Iniciador', text: 'Iniciador', image: '/images/IconIniciador.png' },
+        { value: 'Sentinela', text: 'Sentinela', image: '/images/IconSentinela.png' }
       ]
     };
   },
@@ -127,13 +128,13 @@ export default {
 }
 
 .filter label {
-  margin-right: 10px; /* Espaçamento entre o label e o select */
-  white-space: nowrap; /* Garante que o label não quebra em várias linhas */
+  margin-right: 10px;
+  white-space: nowrap;
 }
 
 .custom-select {
   position: relative;
-  width: 200px; /* Largura desejada do select */
+  width: 200px;
 }
 
 .custom-select select {
