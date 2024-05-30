@@ -15,6 +15,9 @@
       </div>
       <button @click="searchDuos">Buscar</button>
     </div>
+    <div class="recommended-players">
+      <PlayerCard v-for="player in recommendedPlayers" :key="player.id" :player="player" />
+    </div>
   </div>
 </template>
 
@@ -23,13 +26,15 @@ import { getUser } from '@/api';
 import RankingSelect from './RankingSelect.vue';
 import FuncaoSelect from './FuncaoSelect.vue';
 import GameSelect from './GameSelect.vue';
+import PlayerCard from './PlayerCard.vue';
 
 export default {
   name: 'UserDashboard',
   components: {
     RankingSelect,
     FuncaoSelect,
-    GameSelect
+    GameSelect,
+    PlayerCard
   },
   data() {
     return {
@@ -39,6 +44,23 @@ export default {
         ranking: 'Não Selecionado',
         role: 'Não Selecionado'
       },
+      recommendedPlayers: [
+        // Exemplo de jogadores recomendados
+        {
+          id: 1,
+          username: 'Player1',
+          ranking: 'Ouro II',
+          role: 'Duelista',
+          avatar: '/images/player1.png'
+        },
+        {
+          id: 2,
+          username: 'Player2',
+          ranking: 'Platina III',
+          role: 'Iniciador',
+          avatar: '/images/player2.png'
+        }
+      ],
       rankings: [
         { value: 'Não Selecionado', text: 'Não Selecionado', image: '' },
         { value: 'Ferro I', text: 'Ferro I', image: '/images/Ferro1.png' },
@@ -112,7 +134,7 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #282c34;
+  background-color: #202020;
   color: white;
   min-height: 100vh;
 }
@@ -160,6 +182,13 @@ export default {
   pointer-events: none;
   color: white;
   font-size: 12px;
+}
+
+.recommended-players {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 button {
