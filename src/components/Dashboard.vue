@@ -3,11 +3,7 @@
     <div class="filters-container">
       <div class="filter">
         <label for="game">Jogo</label>
-        <div class="custom-select">
-          <select id="game" v-model="filters.game">
-            <option value="Valorant">Valorant</option>
-          </select>
-        </div>
+        <GameSelect :options="games" v-model="filters.game" />
       </div>
       <div class="filter">
         <label for="ranking">Ranking</label>
@@ -26,12 +22,14 @@
 import { getUser } from '@/api';
 import RankingSelect from './RankingSelect.vue';
 import FuncaoSelect from './FuncaoSelect.vue';
+import GameSelect from './GameSelect.vue';
 
 export default {
   name: 'UserDashboard',
   components: {
     RankingSelect,
-    FuncaoSelect
+    FuncaoSelect,
+    GameSelect
   },
   data() {
     return {
@@ -75,6 +73,9 @@ export default {
         { value: 'Duelista', text: 'Duelista', image: '/images/IconDuelista.png' },
         { value: 'Iniciador', text: 'Iniciador', image: '/images/IconIniciador.png' },
         { value: 'Sentinela', text: 'Sentinela', image: '/images/IconSentinela.png' }
+      ],
+      games: [
+        { value: 'Valorant', text: 'Valorant', image: '/images/IconValorant.png' }
       ]
     };
   },
