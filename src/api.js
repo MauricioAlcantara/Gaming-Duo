@@ -24,13 +24,12 @@ export const getUser = (token) => {
 };
 
 export async function updateUser(userId, updatedUser, token) {
-    return axios.put(`/api/usuario/${userId}`, updatedUser, {
+    return api.put(`/usuario/${userId}`, updatedUser, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     });
 }
-
 
 export const deleteUser = (id, token) => {
     return api.delete(`/usuario/${id}`, {
@@ -48,6 +47,5 @@ export const updateAvatar = (formData, token) => {
         }
     });
 };
-
 
 export default api;

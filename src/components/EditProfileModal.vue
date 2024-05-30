@@ -26,6 +26,7 @@
 
 <script>
 import { updateUser } from '@/api';
+
 export default {
   name: 'EditProfileModal',
   props: {
@@ -49,12 +50,12 @@ export default {
       }
       const updatedUser = {
         email: this.email,
-        senha: this.password, // Ajuste o nome do campo para 'senha'
-        senha_confirmation: this.confirmPassword // Adicione o campo de confirmação de senha
+        senha: this.password,
+        senha_confirmation: this.confirmPassword
       };
       const token = localStorage.getItem('token');
       try {
-        await updateUser(this.user.id, updatedUser, token);
+        await updateUser(this.user.id, updatedUser, token); // Certifique-se de que user.id está correto
         this.$emit('save', updatedUser);
       } catch (error) {
         console.error('Erro ao atualizar perfil:', error);
