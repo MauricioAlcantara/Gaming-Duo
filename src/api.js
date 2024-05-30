@@ -23,13 +23,13 @@ export const getUser = (token) => {
     });
 };
 
-export const updateUser = (id, userData, token) => {
-    return api.put(`/usuario/${id}`, userData, {
+export async function updateUser(userId, updatedUser, token) {
+    return axios.put(`/api/usuario/${userId}`, updatedUser, {
         headers: {
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`
         }
     });
-};
+}
 
 
 export const deleteUser = (id, token) => {

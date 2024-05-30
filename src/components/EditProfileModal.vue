@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { updateUser } from '@/api';
 export default {
   name: 'EditProfileModal',
   props: {
@@ -41,16 +42,23 @@ export default {
     close() {
       this.$emit('close');
     },
-    save() {
+    async save() {
       if (this.password !== this.confirmPassword) {
         alert('As senhas não coincidem.');
         return;
       }
       const updatedUser = {
         email: this.email,
-        password: this.password
+        senha: this.password, // Ajuste o nome do campo para 'senha'
+        senha_confirmation: this.confirmPassword // Adicione o campo de confirmação de senha
       };
-      this.$emit('save', updatedUser);
+      const token = localStorage.getItem('token');
+      try {
+        await updateUser(this.user.id, updatedUser, token);
+        this.$emit('save', updatedUser);
+      } catch (error) {
+        console.error('Erro ao atualizar perfil:', error);
+      }
     }
   }
 };
