@@ -5,7 +5,7 @@
       <form @submit.prevent="save">
         <div class="form-group">
           <label for="email">Email:</label>
-          <input type="email" v-model="email" id="email" required />
+          <input type="email" v-model="email" id="email" required disabled class="disabled-email" />
         </div>
         <div class="form-group">
           <label for="password">Nova Senha:</label>
@@ -140,5 +140,10 @@ export default {
 
 .modal-content button[type="button"]:hover {
   background-color: #d32f2f;
+}
+
+.disabled-email {
+  filter: grayscale(100%);
+  opacity: 0.5;
 }
 </style>
