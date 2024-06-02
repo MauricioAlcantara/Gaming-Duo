@@ -109,6 +109,7 @@ export default {
   border: 1px solid #333;
   background-color: #222;
   color: #fff;
+  font-size: 14px;
 }
 
 .button-group {

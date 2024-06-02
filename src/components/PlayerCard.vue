@@ -2,9 +2,12 @@
   <div class="player-card">
     <img :src="player.avatar" alt="Avatar" class="player-avatar" />
     <div class="player-info">
-      <h3>{{ player.username }}</h3>
-      <p>Ranking: {{ player.ranking }}</p>
-      <p>Função: {{ player.role }}</p>
+      <div class="player-username">{{ player.username }}</div>
+      <div class="player-details">
+        <div>Ranking: {{ player.ranking }}</div>
+        <div>Função: {{ player.role }}</div>
+      </div>
+      <button class="connect-button" @click="connectWithPlayer">Conectar</button>
     </div>
   </div>
 </template>
@@ -14,39 +17,66 @@ export default {
   name: 'PlayerCard',
   props: {
     player: Object
+  },
+  methods: {
+    connectWithPlayer() {
+      console.log(`Conectando com ${this.player.username}`);
+      // Lógica de conexão será implementada por outra pessoa
+    }
   }
 };
 </script>
 
 <style scoped>
 .player-card {
-  background-color: #333;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 20px;
-  width: 400px; /* Ajusta a largura do card */
-  text-align: center;
-  color: white;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-bottom: 20px; /* Espaço entre os cards */
+  background-color: #333;
+  padding: 20px;
+  border-radius: 8px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+  position: relative;
 }
 
 .player-avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  margin-right: 20px;
+}
+
+.player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.player-username {
+  font-size: 18px;
+  font-weight: bold;
   margin-bottom: 10px;
 }
 
-.player-info h3 {
-  margin: 10px 0 5px;
-  font-size: 18px;
+.player-details {
+  font-size: 14px;
 }
 
-.player-info p {
-  margin: 5px 0;
-  font-size: 14px;
+.connect-button {
+  background-color: #f90404;
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 13px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.connect-button:hover {
+  background-color: #c20303;
 }
 </style>

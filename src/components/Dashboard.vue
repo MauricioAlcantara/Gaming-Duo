@@ -15,9 +15,26 @@
       </div>
       <button @click="searchDuos">Buscar</button>
     </div>
-    <div class="recommended-players">
-      <PlayerCard v-for="player in recommendedPlayers" :key="player.id" :player="player" />
+
+    <div class="recommended-section">
+      <h2 class="recommended-title">Jogadores Recomendados</h2>
+      <div class="recommended-players-container">
+        <div class="recommended-players">
+          <PlayerCard v-for="player in recommendedPlayers" :key="player.id" :player="player" />
+        </div>
+      </div>
     </div>
+
+    <div class="filtered-section">
+      <h2 class="filtered-title">Jogadores Filtrados</h2>
+      <div class="filtered-players-container">
+        <div class="filtered-players">
+          <PlayerCard v-for="player in filteredPlayers" :key="player.id" :player="player" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Adicione outros cards aqui embaixo se necessário -->
   </div>
 </template>
 
@@ -59,6 +76,23 @@ export default {
           ranking: 'Platina III',
           role: 'Iniciador',
           avatar: '/images/player2.png'
+        }
+      ],
+      filteredPlayers: [
+        // Exemplo de jogadores filtrados
+        {
+          id: 3,
+          username: 'Player3',
+          ranking: 'Diamante I',
+          role: 'Controlador',
+          avatar: '/images/player3.png'
+        },
+        {
+          id: 4,
+          username: 'Player4',
+          ranking: 'Ascendente II',
+          role: 'Sentinela',
+          avatar: '/images/player4.png'
         }
       ],
       rankings: [
@@ -184,11 +218,58 @@ export default {
   font-size: 12px;
 }
 
+.recommended-section {
+  margin-top: 25px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.filtered-section {
+  margin-top: 25px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.recommended-title {
+  margin: 20px 0 10px;
+  color: white;
+}
+
+.filtered-title {
+  margin: 20px 0 10px;
+  color: white;
+}
+
+.recommended-players-container {
+  border: 2px solid #f90404;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.filtered-players-container {
+  border: 2px solid #f90404;
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+}
+
 .recommended-players {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin-top: 20px;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.filtered-players {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 440px;
 }
 
 button {
