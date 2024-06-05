@@ -15,7 +15,7 @@
             <p class="player"><strong>Jogador:</strong> {{ user.player }}</p>
           </div>
           <div class="info-item">
-            <p class="ranking"><strong>Ranking:</strong> {{ user.ranking }}</p>
+            <p class="ranking"><strong>Rank:</strong> {{ user.ranking }}</p>
           </div>
           <div class="info-item">
             <p class="preferred-agent">
