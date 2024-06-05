@@ -47,5 +47,12 @@ export const updateAvatar = (formData, token) => {
         }
     });
 };
+export async function updateValorantStats(gamename, rank, token) {
+    return axios.put('/api/valorant', { gamename, rank }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+}
 
 export default api;

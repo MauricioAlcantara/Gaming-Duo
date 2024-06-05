@@ -70,7 +70,7 @@ export default {
       }
       // Emit the nickname and selected rank to the parent component
       const player = {
-        name: this.nickname,
+        gamename: this.nickname,
         rank: this.selectedRank
       };
       this.$emit('connect', player);
