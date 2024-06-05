@@ -2,10 +2,15 @@
   <div class="modal-overlay" @click.self="close">
     <div class="modal-content">
       <h2>Conectar Conta do Valorant</h2>
-      <input v-model="nickname" placeholder="Nickname#Tag" />
+      <label for="nickname-input" class="input-label">GameName#TAG</label>
+      <input id="nickname-input" v-model="nickname" placeholder="Nickname#Tag" />
+      <label class="input-label">Ranking</label>
+      <div class="ranking-select-wrapper">
+        <RankingSelect :options="rankings" v-model="selectedRank" />
+      </div>
       <p v-if="error" class="error-message">{{ error }}</p>
       <div class="button-group">
-        <button @click="connect">Conectar</button>
+        <button @click="connect">Salvar</button>
         <button @click="close">Cancelar</button>
       </div>
     </div>
@@ -13,46 +18,63 @@
 </template>
 
 <script>
+import RankingSelect from './RankingSelect.vue';
+
 export default {
+  components: {
+    RankingSelect
+  },
   data() {
     return {
       nickname: '',
-      error: ''
+      selectedRank: 'Não Selecionado',
+      error: '',
+      rankings: [
+        { value: 'Não Selecionado', text: 'Não Selecionado', image: '' },
+        { value: 'Ferro I', text: 'Ferro I', image: '/images/Ferro1.png' },
+        { value: 'Ferro II', text: 'Ferro II', image: '/images/Ferro2.png' },
+        { value: 'Ferro III', text: 'Ferro III', image: '/images/Ferro3.png' },
+        { value: 'Bronze I', text: 'Bronze I', image: '/images/Bronze1.png' },
+        { value: 'Bronze II', text: 'Bronze II', image: '/images/Bronze2.png' },
+        { value: 'Bronze III', text: 'Bronze III', image: '/images/Bronze3.png' },
+        { value: 'Prata I', text: 'Prata I', image: '/images/Prata1.png' },
+        { value: 'Prata II', text: 'Prata II', image: '/images/Prata2.png' },
+        { value: 'Prata III', text: 'Prata III', image: '/images/Prata3.png' },
+        { value: 'Ouro I', text: 'Ouro I', image: '/images/Ouro1.png' },
+        { value: 'Ouro II', text: 'Ouro II', image: '/images/Ouro2.png' },
+        { value: 'Ouro III', text: 'Ouro III', image: '/images/Ouro3.png' },
+        { value: 'Platina I', text: 'Platina I', image: '/images/Platina1.png' },
+        { value: 'Platina II', text: 'Platina II', image: '/images/Platina2.png' },
+        { value: 'Platina III', text: 'Platina III', image: '/images/Platina3.png' },
+        { value: 'Diamante I', text: 'Diamante I', image: '/images/Diamante1.png' },
+        { value: 'Diamante II', text: 'Diamante II', image: '/images/Diamante2.png' },
+        { value: 'Diamante III', text: 'Diamante III', image: '/images/Diamante3.png' },
+        { value: 'Ascendente I', text: 'Ascendente I', image: '/images/Ascendente1.png' },
+        { value: 'Ascendente II', text: 'Ascendente II', image: '/images/Ascendente2.png' },
+        { value: 'Ascendente III', text: 'Ascendente III', image: '/images/Ascendente3.png' },
+        { value: 'Imortal I', text: 'Imortal I', image: '/images/Imortal1.png' },
+        { value: 'Imortal II', text: 'Imortal II', image: '/images/Imortal2.png' },
+        { value: 'Imortal III', text: 'Imortal III', image: '/images/Imortal3.png' },
+        { value: 'Radiante', text: 'Radiante', image: '/images/Radiante.png' },
+      ]
     };
   },
   methods: {
     close() {
       this.$emit('close');
     },
-    async connect() {
+    connect() {
       if (!this.nickname.includes('#')) {
         this.error = 'Formato inválido. Use o formato Nickname#Tag.';
         return;
       }
-
-      try {
-        const response = await fetch(`https://public-api.tracker.gg/v2/valorant/standard/profile/riot/${this.nickname.replace('#', '%23')}`, {
-          headers: {
-            'TRN-Api-Key': '406e8c2a-11f3-4fa6-bc53-547695ee13be'
-          }
-        });
-        const data = await response.json();
-
-        if (response.ok) {
-          const player = {
-            name: data.data.platformInfo.platformUserHandle,
-            rank: data.data.segments[0].stats.rank.metadata.tierName
-          };
-          this.$emit('connect', player);
-          this.close();
-        } else {
-          console.log('API response:', data);
-          this.error = data.errors ? data.errors[0].message : 'Erro ao conectar.';
-        }
-      } catch (error) {
-        console.error('Connection error:', error);
-        this.error = 'Erro ao conectar. Tente novamente.';
-      }
+      // Emit the nickname and selected rank to the parent component
+      const player = {
+        name: this.nickname,
+        rank: this.selectedRank
+      };
+      this.$emit('connect', player);
+      this.close();
     }
   }
 };
@@ -83,14 +105,27 @@ export default {
   max-width: 400px;
 }
 
+.input-label {
+  align-self: flex-start;
+  margin-bottom: 5px;
+}
+
+.ranking-select-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
 .modal-content input {
   margin-bottom: 10px;
   padding: 10px;
+  font-size: 14px;
   border-radius: 5px;
   border: 1px solid #333;
   background-color: #222;
   color: #fff;
-  width: 100%;
+  width: 95%;
 }
 
 .error-message {
@@ -99,6 +134,7 @@ export default {
 }
 
 .button-group {
+  margin-top: 5px;
   display: flex;
   gap: 10px;
   width: 100%;
