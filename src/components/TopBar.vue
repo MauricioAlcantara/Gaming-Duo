@@ -9,6 +9,7 @@
       <button class="button-register" @click="goToRoute('cadastro')">Cadastrar-se</button>
     </nav>
     <nav v-else-if="['dashboard', 'UserProfile'].includes(this.$route.name)">
+      <UserNotifications />
       <button @click="$emit('toggle-chat')">Ajuda</button>
       <div class="dropdown">
         <button class="button-profile" @click="toggleDropdown">
@@ -27,10 +28,16 @@
 <script>
 import { getUser } from '@/api';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { faBell, faUser } from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import UserNotifications from './UserNotifications.vue';
+
+library.add(faBell, faUser);
 
 export default {
   components: {
-    FontAwesomeIcon
+    FontAwesomeIcon,
+    UserNotifications
   },
   data() {
     return {
@@ -39,7 +46,7 @@ export default {
         email: '',
         avatar: '/path/to/default/avatar.jpg'
       },
-      dropdownOpen: false
+      dropdownOpen: false,
     };
   },
   created() {
@@ -89,16 +96,16 @@ export default {
       this.dropdownOpen = false;
     },
     logout() {
-      localStorage.removeItem('token'); // Remover o token do localStorage
-      this.user = { username: '', email: '', avatar: '/path/to/default/avatar.jpg' }; // Limpar estado do usuário
-      this.$router.push({ name: 'home' }); // Redirecionar para a página inicial
+      localStorage.removeItem('token');
+      this.user = { username: '', email: '', avatar: '/path/to/default/avatar.jpg' };
+      this.$router.push({ name: 'home' });
       this.dropdownOpen = false;
     },
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -136,6 +143,7 @@ export default {
 
 nav {
   display: flex;
+  align-items: center;
   margin-left: auto;
   margin-right: 30px;
 }
@@ -176,6 +184,12 @@ nav button {
 
 .profile-icon {
   margin-right: 8px;
+}
+
+.notification-icon {
+  font-size: 18px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 nav button:hover {
