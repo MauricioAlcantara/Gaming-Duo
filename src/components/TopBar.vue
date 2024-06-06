@@ -71,10 +71,10 @@ export default {
       }
     },
     goToHome() {
-      if (this.$route.name === 'UserProfile') {
-        this.$router.push({ name: 'dashboard' });
-      } else if (this.$route.name === 'home') {
+      if (this.$route.name === 'dashboard') {
         window.scrollTo(0, 0);
+      } else if (this.$route.name === 'UserProfile') {
+        this.$router.push({ name: 'dashboard' });
       } else {
         this.$router.push({ name: 'home' });
       }
