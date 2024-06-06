@@ -19,14 +19,14 @@
         </div>
         <div class="info-item">
           <p class="preferred-agent">
-            <strong>Agente Preferido:&nbsp;</strong>{{ user.preferredAgent }}
+            <strong>Agente Preferido:&nbsp;</strong>{{ user.preferred_agent }}
             <font-awesome-icon icon="edit" class="edit-icon-small" @click="openModal('preferredAgent')" />
           </p>
         </div>
         <div class="info-item">
           <strong>Função Preferida:&nbsp;</strong>
           <div class="select-container">
-            <select v-model="user.preferredFunction">
+            <select v-model="user.preferred_function" @change="updateUserProfile">
               <option value="Não Escolhida">Não Escolhida</option>
               <option value="Controlador">Controlador</option>
               <option value="Duelista">Duelista</option>
@@ -69,8 +69,8 @@ export default {
         gamename: 'Não Encontrado',
         avatar: '/path/to/default/avatar.jpg',
         rank: 'Não Encontrado',
-        preferredAgent: 'Não Escolhido',
-        preferredFunction: 'Não Escolhida'
+        preferred_agent: 'Não Escolhido',
+        preferred_function: 'Não Escolhida'
       },
       isEditProfileModalOpen: false,
       isAvatarModalOpen: false,
@@ -96,8 +96,8 @@ export default {
             gamename: userData.gamename || 'Não Encontrado',
             avatar: userData.avatar ? `http://localhost:8000/avatars/${userData.avatar}` : '/path/to/default/avatar.jpg',
             rank: userData.rank || 'Não Encontrado',
-            preferredAgent: userData.preferredAgent || 'Não Escolhido',
-            preferredFunction: userData.preferredFunction || 'Não Escolhida'
+            preferred_agent: userData.preferred_agent || 'Não Escolhido',
+            preferred_function: userData.preferred_function || 'Não Escolhida'
           };
         } catch (error) {
           console.error('Erro ao buscar dados do usuário:', error);
@@ -117,11 +117,15 @@ export default {
         this.isEditProfileModalOpen = true;
       }
     },
-    async updateUserProfile(updatedUser) {
+    async updateUserProfile() {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          await updateUser(this.user.id, updatedUser, token);
+          await updateUser(this.user.id, {
+            email: this.user.email,
+            preferred_agent: this.user.preferred_agent,
+            preferred_function: this.user.preferred_function
+          }, token);
           this.fetchUserData();
         } catch (error) {
           console.error('Erro ao atualizar dados do usuário:', error);
@@ -148,7 +152,8 @@ export default {
       }
     },
     updatePreferredAgent(agent) {
-      this.user.preferredAgent = agent;
+      this.user.preferred_agent = agent;
+      this.updateUserProfile();
     },
     updateProfile(updatedUser) {
       this.user.email = updatedUser.email;
