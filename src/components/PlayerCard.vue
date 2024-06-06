@@ -1,14 +1,12 @@
 <template>
   <div class="player-card">
-    <img :src="player.avatar" alt="Avatar" class="player-avatar" />
+    <img :src="player.avatar ? `http://localhost:8000/avatars/${player.avatar}` : '/path/to/default/avatar.jpg'" alt="Avatar" class="avatar" />
     <div class="player-info">
-      <div class="player-username">{{ player.username }}</div>
-      <div class="player-details">
-        <div>Ranking: {{ player.ranking }}</div>
-        <div>Função: {{ player.role }}</div>
-      </div>
-      <button class="connect-button" @click="connectWithPlayer">Conectar</button>
+      <p class="username">{{ player.username }}</p>
+      <p class="ranking"><strong>Ranking:</strong> {{ player.rank }}</p>
+      <p class="role"><strong>Função:</strong> {{ player.preferred_function }}</p>
     </div>
+    <button @click="connectPlayer(player.id)">Conectar</button>
   </div>
 </template>
 
@@ -16,67 +14,55 @@
 export default {
   name: 'PlayerCard',
   props: {
-    player: Object
+    player: {
+      type: Object,
+      required: true
+    }
   },
   methods: {
-    connectWithPlayer() {
-      console.log(`Conectando com ${this.player.username}`);
-      // Lógica de conexão será implementada por outra pessoa
+    connectPlayer(playerId) {
+      // Adicione aqui a lógica para conectar com o jogador
+      console.log(`Conectando com o jogador ${playerId}`);
     }
   }
-};
+}
 </script>
 
 <style scoped>
 .player-card {
   display: flex;
   align-items: center;
+  padding: 10px;
   background-color: #333;
-  padding: 20px;
-  border-radius: 8px;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px;
-  position: relative;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-.player-avatar {
-  width: 80px;
-  height: 80px;
+.avatar {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .player-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
-.player-username {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
+.username, .ranking, .role {
+  margin: 5px 0;
 }
 
-.player-details {
-  font-size: 14px;
-}
-
-.connect-button {
+button {
   background-color: #f90404;
   border: none;
-  padding: 8px 16px;
+  padding: 5px 10px;
   color: white;
   cursor: pointer;
   border-radius: 5px;
-  font-size: 13px;
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
 }
 
-.connect-button:hover {
+button:hover {
   background-color: #c20303;
 }
 </style>

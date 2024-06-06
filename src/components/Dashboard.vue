@@ -33,12 +33,11 @@
         </div>
       </div>
     </div>
-
-    <!-- Adicione outros cards aqui embaixo se necessário -->
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import { getUser } from '@/api';
 import RankingSelect from './RankingSelect.vue';
 import FuncaoSelect from './FuncaoSelect.vue';
@@ -61,40 +60,8 @@ export default {
         ranking: 'Não Selecionado',
         role: 'Não Selecionado'
       },
-      recommendedPlayers: [
-        // Exemplo de jogadores recomendados
-        {
-          id: 1,
-          username: 'Player1',
-          ranking: 'Ouro II',
-          role: 'Duelista',
-          avatar: '/images/player1.png'
-        },
-        {
-          id: 2,
-          username: 'Player2',
-          ranking: 'Platina III',
-          role: 'Iniciador',
-          avatar: '/images/player2.png'
-        }
-      ],
-      filteredPlayers: [
-        // Exemplo de jogadores filtrados
-        {
-          id: 3,
-          username: 'Player3',
-          ranking: 'Diamante I',
-          role: 'Controlador',
-          avatar: '/images/player3.png'
-        },
-        {
-          id: 4,
-          username: 'Player4',
-          ranking: 'Ascendente II',
-          role: 'Sentinela',
-          avatar: '/images/player4.png'
-        }
-      ],
+      recommendedPlayers: [],
+      filteredPlayers: [],
       rankings: [
         { value: 'Não Selecionado', text: 'Não Selecionado', image: '' },
         { value: 'Ferro I', text: 'Ferro I', image: '/images/Ferro1.png' },
@@ -137,6 +104,7 @@ export default {
   },
   created() {
     this.fetchUserData();
+    this.fetchRecommendedPlayers();
   },
   methods: {
     async fetchUserData() {
@@ -151,9 +119,35 @@ export default {
         }
       }
     },
-    searchDuos() {
-      console.log('Buscando duos com filtros:', this.filters);
-      // Aqui você pode adicionar a lógica para buscar duos com base nos filtros selecionados.
+    async fetchRecommendedPlayers() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await axios.get('http://localhost:8000/api/usuario/recommended', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          this.recommendedPlayers = response.data;
+        } catch (error) {
+          console.error('Erro ao buscar jogadores recomendados:', error);
+        }
+      }
+    },
+    async searchDuos() {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await axios.post('http://localhost:8000/api/usuario/filter', this.filters, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          this.filteredPlayers = response.data;
+        } catch (error) {
+          console.error('Erro ao buscar jogadores filtrados:', error);
+        }
+      }
     }
   },
   mounted() {
