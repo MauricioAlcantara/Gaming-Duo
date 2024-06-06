@@ -59,7 +59,7 @@ export default {
     };
   },
   methods: {
-    async handleRegister() {  // Adicione a palavra-chave async
+    async handleRegister() {
       this.showUsernameRequired = !this.registerData.username;
       this.showEmailRequired = !this.registerData.email;
       this.showPasswordRequired = !this.registerData.password;
@@ -75,7 +75,7 @@ export default {
 
           if (response.data.usuario) {
             alert('Cadastro realizado com sucesso!');
-
+            this.$router.push({ name: 'login' });
           } else {
             alert('Erro ao cadastrar usuário.');
           }
