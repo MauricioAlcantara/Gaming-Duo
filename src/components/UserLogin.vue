@@ -31,13 +31,15 @@
         <p>Por favor, insira seu e-mail para receber um link de redefinição de senha.</p>
         <input type="email" v-model="resetEmail" placeholder="Seu e-mail">
         <button @click="sendResetLink">Enviar</button>
+        <p v-if="resetStatus" class="status-message">{{ resetStatus }}</p>
+        <p v-if="resetError" class="error-message">{{ resetError }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { login } from '@/api';
+import { login, requestPasswordReset } from '@/api';
 
 export default {
   name: 'UserLogin',
@@ -50,7 +52,9 @@ export default {
       showEmailRequired: false,
       showPasswordRequired: false,
       showResetPasswordModal: false,
-      resetEmail: ''
+      resetEmail: '',
+      resetStatus: '',
+      resetError: ''
     };
   },
   methods: {
@@ -64,7 +68,6 @@ export default {
             email: this.loginData.email,
             senha: this.loginData.password
           });
-
 
           if (response.data.success) {
             alert('Login realizado com sucesso!');
@@ -91,10 +94,21 @@ export default {
     },
     toggleResetPasswordModal() {
       this.showResetPasswordModal = !this.showResetPasswordModal;
+      this.resetStatus = '';
+      this.resetError = '';
     },
-    sendResetLink() {
-      console.log('Enviar link de redefinição para:', this.resetEmail);
-      this.toggleResetPasswordModal();
+    async sendResetLink() {
+      try {
+        // eslint-disable-next-line no-unused-vars
+        const response = await requestPasswordReset(this.resetEmail);
+        this.resetStatus = 'Link de redefinição de senha enviado para o e-mail fornecido.';
+        this.resetError = '';
+        this.toggleResetPasswordModal();
+      } catch (error) {
+        console.error('Erro ao enviar link de redefinição de senha:', error);
+        this.resetError = 'Erro ao enviar link de redefinição de senha. Verifique o e-mail e tente novamente.';
+        this.resetStatus = '';
+      }
     },
     goToRegister() {
       this.$router.push({ name: 'cadastro' });

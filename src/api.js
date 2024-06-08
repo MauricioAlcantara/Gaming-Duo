@@ -55,4 +55,12 @@ export async function updateValorantStats(gamename, rank, token) {
     });
 }
 
+export const requestPasswordReset = (email) => {
+    return api.post('/password/email', { email });
+};
+
+export const resetPassword = (data) => {
+    return api.post('/password/reset', data);
+};
+
 export default api;

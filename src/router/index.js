@@ -4,6 +4,7 @@ import LandingPage from '../components/LandingPage.vue';
 import UserLogin from "@/components/UserLogin.vue";
 import CadastroForm from "@/components/Cadastro.vue";
 import UserProfile from '@/components/UserProfile.vue';
+import PasswordReset from "@/components/PasswordReset.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -32,6 +33,11 @@ const router = createRouter({
             path: '/profile',
             name: 'UserProfile',
             component: UserProfile
+        },
+        {
+            path: '/password-reset/:token',
+            name: 'PasswordReset',
+            component: PasswordReset
         },
     ]
 });
