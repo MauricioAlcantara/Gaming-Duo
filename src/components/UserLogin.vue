@@ -30,7 +30,7 @@
         <h2>Redefinir Senha</h2>
         <p>Por favor, insira seu e-mail para receber um link de redefinição de senha.</p>
         <input type="email" v-model="resetEmail" placeholder="Seu e-mail">
-        <button @click="sendResetLink">Enviar</button>
+        <button @click="sendResetLink" class="reset-button">Enviar</button>
         <p v-if="resetStatus" class="status-message">{{ resetStatus }}</p>
         <p v-if="resetError" class="error-message">{{ resetError }}</p>
       </div>
@@ -250,5 +250,22 @@ input[type="text"], input[type="password"] {
   font-size: 15px;
   transition: border-color 0.3s, box-shadow 0.3s;
   outline: none;
+}
+
+.reset-button {
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #f90404;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+  font-size: 15px;
+}
+
+.reset-button:hover {
+  background-color: #cc0303;
 }
 </style>

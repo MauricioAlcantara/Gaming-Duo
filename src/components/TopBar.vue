@@ -2,7 +2,7 @@
   <div class="top-bar">
     <img src="/images/logo.png" alt="Logo" class="logo" @click="goToHome">
     <span class="site-name" @click="goToHome">Gaming Duo</span>
-    <nav v-if="!['dashboard', 'login', 'cadastro', 'UserProfile'].includes(this.$route.name)">
+    <nav v-if="!['dashboard', 'login', 'cadastro', 'UserProfile', 'PasswordReset'].includes(this.$route.name)">
       <button @click="scrollToSection('quem-somos-section')">Sobre Nós</button>
       <button @click="$emit('toggle-chat')">Ajuda</button>
       <button class="button-login" @click="goToRoute('login')">Entrar</button>
