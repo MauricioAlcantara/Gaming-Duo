@@ -45,6 +45,10 @@ export default {
         const response = await resetPassword(this.form);
         this.message = response.data.message;
         this.error = '';
+        // Adicione o redirecionamento para a tela de login após o sucesso
+        setTimeout(() => {
+          this.$router.push({ name: 'login' });
+        }, 2000); // Redireciona após 2 segundos para que a mensagem de sucesso seja exibida
       } catch (error) {
         if (error.response && error.response.data) {
           this.error = error.response.data.errors || 'Erro ao redefinir a senha. Por favor, tente novamente.';

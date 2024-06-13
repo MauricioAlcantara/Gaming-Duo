@@ -55,10 +55,12 @@ export default {
       };
       const token = localStorage.getItem('token');
       try {
-        await updateUser(this.user.id, updatedUser, token); // Certifique-se de que user.id está correto
-        this.$emit('save', updatedUser);
+        await updateUser(this.user.id, updatedUser, token);
+        alert('Senha alterada com sucesso!');
+        this.close();
       } catch (error) {
         console.error('Erro ao atualizar perfil:', error);
+        alert('Erro ao atualizar perfil. Por favor, tente novamente.');
       }
     }
   }
