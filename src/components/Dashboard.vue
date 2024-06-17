@@ -13,7 +13,7 @@
         <label for="role">Função</label>
         <FuncaoSelect :options="roles" v-model="filters.role" />
       </div>
-      <button @click="searchDuos">Buscar</button>
+      <button @click="searchDuos" class="search-btn">Buscar</button>
     </div>
 
     <div class="recommended-section">
@@ -171,16 +171,19 @@ export default {
   display: flex;
   gap: 20px;
   margin-top: 60px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .filter {
   display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
 .filter label {
-  margin-right: 10px;
-  white-space: nowrap;
+  margin-bottom: 5px;
 }
 
 .custom-select {
@@ -212,71 +215,62 @@ export default {
   font-size: 12px;
 }
 
-.recommended-section {
-  margin-top: 25px;
-  width: 100%;
-  max-width: 800px;
-}
-
+.recommended-section,
 .filtered-section {
   margin-top: 25px;
   width: 100%;
   max-width: 800px;
 }
 
-.recommended-title {
-  margin: 20px 0 10px;
-  color: white;
-}
-
+.recommended-title,
 .filtered-title {
   margin: 20px 0 10px;
   color: white;
+  text-align: center;
 }
 
-.recommended-players-container {
-  border: 2px solid #f90404;
-  padding: 20px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-}
-
+.recommended-players-container,
 .filtered-players-container {
   border: 2px solid #f90404;
   padding: 20px;
   border-radius: 8px;
-  display: flex;
-  justify-content: center;
-}
-
-.recommended-players {
+  max-height: 400px;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  width: 100%;
-  max-width: 440px;
 }
 
+.recommended-players,
 .filtered-players {
   display: flex;
   flex-direction: column;
   gap: 10px;
   width: 100%;
-  max-width: 440px;
 }
 
 button {
   background-color: #f90404;
   border: none;
-  padding: 10px 20px;
+  padding: 10px 15px;
   color: white;
   cursor: pointer;
   border-radius: 5px;
   font-size: 15px;
+  transition: background-color 0.3s;
 }
 
 button:hover {
   background-color: #c20303;
+}
+
+button.search-btn {
+  padding: 10px 15px;
+  width: auto;
+  white-space: nowrap;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  margin-top: 25px;
 }
 </style>

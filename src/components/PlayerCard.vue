@@ -1,12 +1,12 @@
 <template>
-  <div class="player-card">
+  <div class="card">
     <img :src="player.avatar ? `http://localhost:8000/avatars/${player.avatar}` : '/path/to/default/avatar.jpg'" alt="Avatar" class="avatar" />
-    <div class="player-info">
-      <p class="username">{{ player.username }}</p>
-      <p class="ranking"><strong>Ranking:</strong> {{ player.rank }}</p>
-      <p class="role"><strong>Função:</strong> {{ player.preferred_function }}</p>
+    <div class="card-info">
+      <p><strong>{{ player.username }}</strong></p>
+      <p><strong>Ranking:</strong> {{ player.rank }}</p>
+      <p><strong>Função:</strong> {{ player.preferred_function }}</p>
     </div>
-    <button @click="connectPlayer(player.id)">Conectar</button>
+    <button @click="connectPlayer(player.id)" class="connect-btn">Conectar</button>
   </div>
 </template>
 
@@ -21,7 +21,6 @@ export default {
   },
   methods: {
     connectPlayer(playerId) {
-      // Adicione aqui a lógica para conectar com o jogador
       console.log(`Conectando com o jogador ${playerId}`);
     }
   }
@@ -29,40 +28,43 @@ export default {
 </script>
 
 <style scoped>
-.player-card {
+.card {
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
   display: flex;
   align-items: center;
-  padding: 10px;
-  background-color: #333;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .avatar {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
-.player-info {
+.card-info {
   flex: 1;
 }
 
-.username, .ranking, .role {
+.card-info p {
   margin: 5px 0;
 }
 
-button {
-  background-color: #f90404;
-  border: none;
-  padding: 5px 10px;
+.connect-btn {
+  background-color: #e74c3c;
   color: white;
-  cursor: pointer;
+  border: none;
   border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #c20303;
+.connect-btn:hover {
+  background-color: #c0392b;
 }
 </style>
