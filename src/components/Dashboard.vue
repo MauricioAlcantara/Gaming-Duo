@@ -6,7 +6,7 @@
         <GameSelect :options="games" v-model="filters.game" />
       </div>
       <div class="filter">
-        <label for="ranking">Ranking</label>
+        <label for="ranking">Elo</label>
         <RankingSelect :options="rankings" v-model="filters.ranking" />
       </div>
       <div class="filter">
