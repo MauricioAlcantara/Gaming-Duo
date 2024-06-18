@@ -200,8 +200,8 @@ export default {
   background-color: #333;
   color: white;
   appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  height: 40px;
+  line-height: 40px;
 }
 
 .custom-select::after {
@@ -231,9 +231,10 @@ export default {
 
 .recommended-players-container,
 .filtered-players-container {
-  border: 2px solid #f90404;
+  border: 1px solid #444;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   max-height: 400px;
   overflow-y: auto;
   display: flex;
