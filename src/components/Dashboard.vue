@@ -229,6 +229,29 @@ export default {
   text-align: center;
 }
 
+/* Estilo padrão para a barra de rolagem */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #2b2b2b;
+  border-radius: 10px;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background-color: #333;
+  border-radius: 10px;
+  border: 3px solid #2b2b2b;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #333;
+}
 .recommended-players-container,
 .filtered-players-container {
   border: 1px solid #444;
