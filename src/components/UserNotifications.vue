@@ -4,23 +4,33 @@
     <div v-if="dropdownOpen" class="dropdown-content" ref="dropdown">
       <div class="arrow-up"></div>
       <ul>
-        <li v-for="(notification, index) in notifications" :key="index">{{ notification.message }}</li>
+        <li v-for="(notification, index) in notifications" :key="index" @click="openModal(notification)">
+          {{ notification.message }}
+        </li>
       </ul>
     </div>
+    <!-- Modal Component -->
+    <ModalComponent v-if="isModalOpen" @close="isModalOpen = false" :notification="selectedNotification" />
   </div>
 </template>
 
 <script>
 // import axios from 'axios'; // Comentando a importação de axios por enquanto
+import ModalComponent from './ConnectionModal.vue'; // Importar o modal
 
 export default {
+  components: {
+    ModalComponent, // Registrar o modal
+  },
   data() {
     return {
       dropdownOpen: false,
+      isModalOpen: false, // Controle para abrir ou fechar o modal
+      selectedNotification: null, // Guarda a notificação clicada
       notifications: [
-        { message: 'Mauricio se conectou com você para jogarem juntos!' }, // qunado estiver conectado restirar isso
-        { message: 'Italo se conectou com você para jogarem juntos!' }, // qunado estiver conectado restirar isso
-        { message: 'Renan se conectou com você para jogarem juntos!' }, // qunado estiver conectado restirar isso
+        { message: 'Mauricio se conectou com você para jogarem juntos!' },
+        { message: 'Italo se conectou com você para jogarem juntos!' },
+        { message: 'Renan se conectou com você para jogarem juntos!' },
       ]
     };
   },
@@ -39,23 +49,14 @@ export default {
       if (this.$refs.dropdown && !this.$refs.dropdown.contains(event.target)) {
         this.closeDropdown();
       }
-    }
-    // Método para buscar dados do usuário, deixar comentado até precisar
-    /*
-    async fetchUsername() {
-      try {
-        const response = await axios.get('http://localhost:8000/api/user'); // Altere para o endpoint correto da sua API
-        const username = response.data.username; // Ajuste conforme a estrutura da resposta da sua API
-        this.addNotification(username);
-      } catch (error) {
-        console.error('Erro ao buscar dados do usuário:', error);
-      }
     },
-    */
+    openModal(notification) {
+      this.selectedNotification = notification; // Define a notificação selecionada
+      this.isModalOpen = true; // Abre o modal
+    }
   },
   mounted() {
     document.addEventListener('click', this.handleClickOutside);
-    // this.fetchUsername(); // Chamada ao método para adicionar notificação com dados do usuário, deixar comentado até precisar
   },
   beforeUnmount() {
     document.removeEventListener('click', this.handleClickOutside);
@@ -116,5 +117,10 @@ li {
   border-radius: 5px;
   text-align: left;
   width: calc(100% - 30px);
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #444;
 }
 </style>
