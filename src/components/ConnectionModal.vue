@@ -1,32 +1,54 @@
 <template>
   <div class="modal-overlay" @click.self="closeModal">
-    <div class="modal-content">
-      <!-- Nome e imagem do usuário logado -->
-      <div class="user-info">
-        <img :src="loggedUserImage" alt="Sua Imagem" class="user-image" />
-        <p>{{ loggedUserName }}</p>
+    <div class="modal-content" @click.stop>
+      <!-- Seção de informações dos jogadores -->
+      <div class="player-info">
+        <!-- Nome e imagem do usuário logado -->
+        <div class="user-info">
+          <img :src="loggedUserImage ? loggedUserImage : '/path/to/default/avatar.jpg'" alt="Sua Imagem" class="user-image" />
+          <p>{{ loggedUserName }}</p>
+        </div>
+
+        <!-- Ícones de setas para conexão -->
+        <div class="connection-arrows">
+          <font-awesome-icon icon="arrow-up" class="arrow-icon" />
+          <font-awesome-icon icon="arrow-down" class="arrow-icon" />
+        </div>
+
+        <!-- Nome e imagem do jogador que enviou a notificação -->
+        <div class="user-info">
+          <img :src="notification.userImage ? notification.userImage : '/path/to/default/avatar.jpg'" alt="Imagem do Jogador" class="user-image" />
+          <p>{{ notification.userName }}</p>
+        </div>
       </div>
 
-      <!-- Setas de conexão -->
-      <div class="connection-arrows">
-        <img src="/images/setas.png" alt="Setas" class="arrows-image" />
+      <!-- Seção do chat -->
+      <div class="chat-section">
+        <div class="chat-messages">
+          <p v-for="(message, index) in chatMessages" :key="index" class="chat-message">{{ message }}</p>
+        </div>
+        <div class="chat-input">
+          <input type="text" v-model="newMessage" placeholder="Digite sua mensagem..." @keyup.enter="sendMessage" />
+          <button @click="sendMessage">Enviar</button>
+        </div>
       </div>
-
-      <!-- Nome e imagem do jogador que enviou a notificação -->
-      <div class="user-info">
-        <img :src="notification.userImage" alt="Imagem do Jogador" class="user-image" />
-        <p>{{ notification.userName }}</p>
-      </div>
-
-      <button @click="closeModal">Fechar</button>
     </div>
   </div>
 </template>
 
 <script>
-import { getUser } from '@/api'; // Supondo que tenha um método para buscar o usuário logado
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'; // Importa FontAwesomeIcon
+import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons'; // Importa ícones de setas
+import { library } from '@fortawesome/fontawesome-svg-core'; // Biblioteca do FontAwesome
+import { getUser } from '@/api'; // Certifique-se de que getUser está importado corretamente
+
+// Adiciona os ícones à biblioteca
+library.add(faArrowUp, faArrowDown);
 
 export default {
+  components: {
+    FontAwesomeIcon,
+  },
   props: {
     notification: {
       type: Object,
@@ -37,16 +59,25 @@ export default {
     return {
       loggedUserName: '',
       loggedUserImage: '',
+      chatMessages: [], // Armazena as mensagens trocadas
+      newMessage: '', // Armazena a nova mensagem que está sendo digitada
     };
   },
   methods: {
     async fetchLoggedUser() {
       try {
         const response = await getUser(localStorage.getItem('token')); // Pega o usuário logado pelo token
-        this.loggedUserName = response.data.username; // Atualiza o nome
-        this.loggedUserImage = response.data.avatar || '/path/to/default-avatar.png'; // Atualiza a imagem
+        const userData = response.data.usuario;
+        this.loggedUserName = userData.username; // Atualiza o nome
+        this.loggedUserImage = userData.avatar ? `http://localhost:8000/avatars/${userData.avatar}` : '/path/to/default/avatar.jpg'; // Atualiza a imagem
       } catch (error) {
         console.error('Erro ao buscar o usuário logado:', error);
+      }
+    },
+    sendMessage() {
+      if (this.newMessage.trim()) {
+        this.chatMessages.push(`${this.loggedUserName}: ${this.newMessage}`); // Adiciona a nova mensagem à lista de mensagens
+        this.newMessage = ''; // Limpa o campo de entrada
       }
     },
     closeModal() {
@@ -54,7 +85,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchLoggedUser(); // Busca os dados do usuário logado ao montar o componente
+    this.fetchLoggedUser();
   }
 };
 </script>
@@ -77,9 +108,13 @@ export default {
   padding: 20px;
   border-radius: 10px;
   color: white;
-  text-align: center;
-  width: 90%;
-  max-width: 400px;
+  display: flex; /* Alinhamento horizontal dos itens */
+  width: 64%;
+  max-width: 622px; /* Aumenta a largura do modal */
+}
+
+.player-info {
+  width: 60%; /* Área de informações dos jogadores ocupa 60% do modal */
 }
 
 .user-info {
@@ -99,14 +134,53 @@ export default {
 
 .connection-arrows {
   margin: 20px 0;
+  text-align: center;
 }
 
-.arrows-image {
-  width: 60px;
-  height: auto;
+.arrow-icon {
+  font-size: 24px;
+  color: white;
+  margin: 5px;
 }
 
-button {
+.chat-section {
+  background: #1e1e1e;
+  border-radius: 10px;
+  padding: 15px;
+  width: 40%; /* Chat ocupa 40% do modal */
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  height: 235px;
+  overflow-y: scroll;
+  margin-bottom: 15px;
+  border: 1px solid #333;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.chat-message {
+  padding: 5px 0;
+}
+
+.chat-input {
+  display: flex;
+  padding-top: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #333;
+  margin-right: 10px;
+}
+
+.chat-input button {
   padding: 10px 20px;
   background-color: #4caf50;
   border: none;
@@ -115,7 +189,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.chat-input button:hover {
   background-color: #45a049;
 }
 </style>
