@@ -63,4 +63,8 @@ export const resetPassword = (data) => {
     return api.post('/password/reset', data);
 };
 
+export const sendNotification = (data) => {
+    return api.post('/sendNotification', data);
+};
+
 export default api;

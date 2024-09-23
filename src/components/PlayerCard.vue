@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { sendNotification } from '../api'; // Função para enviar a notificação
+
 export default {
   name: 'PlayerCard',
   props: {
@@ -20,8 +22,16 @@ export default {
     }
   },
   methods: {
-    connectPlayer(playerId) {
+    async connectPlayer(playerId) {
       console.log(`Conectando com o jogador ${playerId}`);
+
+      // Enviar a notificação via API
+      try {
+        const response = await sendNotification({ sender: this.$store.state.username, receiver: playerId });
+        console.log(response.data.message);
+      } catch (error) {
+        console.error('Erro ao conectar:', error);
+      }
     }
   }
 }
