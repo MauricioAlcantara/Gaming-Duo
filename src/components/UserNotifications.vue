@@ -5,7 +5,7 @@
       <div class="arrow-up"></div>
       <ul>
         <li v-for="(notification, index) in notifications" :key="index" @click="openModal(notification)">
-          {{ notification.message }}
+          {{ notification.sender_nick }} se conectou com você para jogarem juntos!
         </li>
       </ul>
     </div>
@@ -15,8 +15,8 @@
 </template>
 
 <script>
-// import axios from 'axios'; // Comentando a importação de axios por enquanto
-import ModalComponent from './ConnectionModal.vue'; // Importar o modal
+import { getNotifications } from '../api'; // Importa a função para buscar as notificações
+import ModalComponent from './ConnectionModal.vue'; // Importa o modal
 
 export default {
   components: {
@@ -27,18 +27,10 @@ export default {
       dropdownOpen: false,
       isModalOpen: false, // Controle para abrir ou fechar o modal
       selectedNotification: null, // Guarda a notificação clicada
-      notifications: [
-        { message: 'Mauricio se conectou com você para jogarem juntos!' },
-        { message: 'Italo se conectou com você para jogarem juntos!' },
-        { message: 'Renan se conectou com você para jogarem juntos!' },
-      ]
+      notifications: [] // Inicializa como um array vazio
     };
   },
   methods: {
-    addNotification(username) {
-      const message = `${username} se conectou com você para jogarem juntos!`;
-      this.notifications.push({ message });
-    },
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
     },
@@ -53,10 +45,30 @@ export default {
     openModal(notification) {
       this.selectedNotification = notification; // Define a notificação selecionada
       this.isModalOpen = true; // Abre o modal
+    },
+    async fetchNotifications() {
+      // Obtém o token armazenado
+      const token = localStorage.getItem('token'); // Supondo que o token esteja armazenado no localStorage
+
+      if (!token) {
+        console.error('Token não encontrado');
+        return;
+      }
+
+      try {
+        const response = await getNotifications(token);
+        this.notifications = response.data.notifications; // Recebe as notificações pendentes
+        console.log('Notificações carregadas:', this.notifications);
+      } catch (error) {
+        console.error('Erro ao carregar notificações:', error);
+      }
     }
   },
   mounted() {
     document.addEventListener('click', this.handleClickOutside);
+
+    // Carregar notificações quando o componente for montado
+    this.fetchNotifications();
   },
   beforeUnmount() {
     document.removeEventListener('click', this.handleClickOutside);
@@ -65,6 +77,7 @@ export default {
 </script>
 
 <style scoped>
+/* Seu CSS permanece igual */
 .notification-container {
   position: relative;
   display: inline-block;

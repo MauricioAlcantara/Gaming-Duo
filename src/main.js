@@ -7,6 +7,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEdit, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
+import store from './store'; // Importa a store do Vuex
+
 // Adiciona os ícones à biblioteca
 library.add(faEdit, faUser);
 
@@ -17,6 +19,9 @@ app.component('font-awesome-icon', FontAwesomeIcon);
 
 // Usa o router
 app.use(router);
+
+// Usa o Vuex store
+app.use(store); // Adiciona o Vuex store à aplicação
 
 // Monta o aplicativo
 app.mount('#app');

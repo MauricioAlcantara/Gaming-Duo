@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { sendNotification } from '../api'; // Função para enviar a notificação
+import { sendConnectionRequest } from '../api'; // Função para enviar a solicitação de conexão
 
 export default {
   name: 'PlayerCard',
@@ -25,12 +25,29 @@ export default {
     async connectPlayer(playerId) {
       console.log(`Conectando com o jogador ${playerId}`);
 
-      // Enviar a notificação via API
+      // Obter o token do jogador logado (usando Vuex ou localStorage)
+      const token = localStorage.getItem('token'); // Certifique-se de que o token está sendo armazenado corretamente
+
+      if (!token) {
+        console.error('Erro: Token não encontrado');
+        return;
+      }
+
+      // Enviar a solicitação de conexão via API
       try {
-        const response = await sendNotification({ sender: this.$store.state.username, receiver: playerId });
-        console.log(response.data.message);
+        const response = await sendConnectionRequest(playerId, token);
+
+        // Exibir a resposta completa no console para inspeção
+        console.log('Resposta da API:', response);
+
+        // Verifique se a API retorna o objeto notification
+        if (response.data && response.data.notification) {
+          console.log('Notificação enviada:', response.data.notification); // Exibe a notificação
+        } else {
+          console.log('Nenhuma notificação encontrada na resposta da API');
+        }
       } catch (error) {
-        console.error('Erro ao conectar:', error);
+        console.error('Erro ao conectar:', error.response ? error.response.data : error);
       }
     }
   }

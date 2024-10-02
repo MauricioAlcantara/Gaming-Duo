@@ -63,6 +63,22 @@ export const resetPassword = (data) => {
     return api.post('/password/reset', data);
 };
 
+export const sendConnectionRequest = (receiverId, token) => {
+    return api.post('/notifications/send', { receiver_id: receiverId }, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+};
+
+export const getNotifications = (token) => {
+    return api.get('/notifications/pending', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+};
+
 export const sendNotification = (data) => {
     return api.post('/sendNotification', data);
 };
