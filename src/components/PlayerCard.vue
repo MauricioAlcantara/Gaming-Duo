@@ -10,6 +10,9 @@
       <button @click="connectPlayer(player.id)" class="connect-btn">Conectar</button>
     </div>
   </div>
+  <div v-if="notification" class="notification success">
+    {{ notification }}
+  </div>
 </template>
 
 <script>
@@ -23,30 +26,39 @@ export default {
       required: true
     }
   },
-  methods: {
-  async connectPlayer(playerId) {
-    console.log(`Conectando com o jogador ${playerId}`);
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('Erro: Token não encontrado');
-      return;
-    }
-    try {
-      const response = await sendConnectionRequest(playerId, token);
-      console.log('Resposta da API:', response);
-      if (response.data && response.data.notification) {
-        console.log('Notificação enviada:', response.data.notification);
-      } else {
-        console.log('Nenhuma notificação encontrada na resposta da API');
-      }
-    } catch (error) {
-      console.error('Erro ao conectar:', error.response ? error.response.data : error);
+  data() {
+    return {
+      notification: ''
     }
   },
-  goToPlayerProfile(username) {
-    this.$router.push({ name: 'UserProfileView', params: { username } });
+  methods: {
+    async connectPlayer(playerId) {
+      console.log(`Conectando com o jogador ${playerId}`);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('Erro: Token não encontrado');
+        return;
+      }
+      try {
+        const response = await sendConnectionRequest(playerId, token);
+        console.log('Resposta da API:', response);
+        if (response.data && response.data.notification) {
+          console.log('Notificação enviada:', response.data.notification);
+        } else {
+          console.log('Nenhuma notificação encontrada na resposta da API');
+        }
+        this.notification = 'Foi enviada sua solicitação de conexão';
+        setTimeout(() => {
+          this.notification = '';
+        }, 3000);
+      } catch (error) {
+        console.error('Erro ao conectar:', error.response ? error.response.data : error);
+      }
+    },
+    goToPlayerProfile(username) {
+      this.$router.push({ name: 'UserProfileView', params: { username } });
+    }
   }
-}
 }
 </script>
 
@@ -96,4 +108,19 @@ export default {
   background-color: #c0392b;
 }
 
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.notification.success {
+  background-color: #28a745;
+}
 </style>
