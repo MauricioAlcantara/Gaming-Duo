@@ -1,21 +1,16 @@
 <template>
-  <div
-      class="custom-select"
-      :class="{ 'open': dropdownOpen }"
-      @click="toggleDropdown"
-      @click.stop
-  >
-    <div class="selected-option">
+  <div class="custom-select" :class="{ 'open': dropdownOpen }">
+    <div class="selected-option" @click="toggleDropdown">
       <img :src="selectedOption.image" class="game-icon" v-if="selectedOption.image" />
       {{ selectedOption.text }}
     </div>
     <div class="dropdown" v-if="dropdownOpen">
       <div
-          class="option"
-          v-for="(option, index) in options"
-          :key="option.value"
-          @click="selectOption(option)"
-          :class="{ 'even': index % 2 === 0, 'odd': index % 2 !== 0, 'selected': option.value === selectedOption.value }"
+        class="option"
+        v-for="(option, index) in options"
+        :key="option.value"
+        @click.stop="selectOption(option)"
+        :class="{ 'even': index % 2 === 0, 'odd': index % 2 !== 0, 'selected': option.value === selectedOption.value }"
       >
         <img :src="option.image" class="game-icon" v-if="option.image" />
         {{ option.text }}
@@ -29,18 +24,22 @@ export default {
   name: 'GameSelect',
   props: {
     options: Array,
-    modelValue: String
+    modelValue: String,
   },
   data() {
     return {
       dropdownOpen: false,
-      selectedOption: this.options.find(option => option.value === this.modelValue) || this.options[0]
+      selectedOption:
+        this.options.find((option) => option.value === this.modelValue) ||
+        this.options[0],
     };
   },
   watch: {
     modelValue(newValue) {
-      this.selectedOption = this.options.find(option => option.value === newValue) || this.options[0];
-    }
+      this.selectedOption =
+        this.options.find((option) => option.value === newValue) ||
+        this.options[0];
+    },
   },
   mounted() {
     document.addEventListener('click', this.closeDropdown);
@@ -58,14 +57,10 @@ export default {
       }
     },
     selectOption(option) {
-      if (option.value === this.selectedOption.value) {
-        this.$emit('update:modelValue', this.options[0].value);
-      } else {
-        this.$emit('update:modelValue', option.value);
-      }
+      this.$emit('update:modelValue', option.value);
       this.dropdownOpen = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

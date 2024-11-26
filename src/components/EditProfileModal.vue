@@ -1,7 +1,7 @@
 <template>
   <div class="modal-overlay" @click.self="close">
     <div class="modal-content">
-      <h2 class="modal-title">Editar Perfil</h2>
+      <h2 class="modal-title">Redefinir Senha</h2>
       <form @submit.prevent="save">
         <div class="form-group">
           <label for="email">Email:</label>

@@ -63,7 +63,7 @@ export default {
           this.user = {
             username: userData.username,
             email: userData.email,
-            avatar: userData.avatar ? `http://localhost:8000/avatars/${userData.avatar}` : '/path/to/default/avatar.jpg'
+            avatar: userData.avatar ? `http://4.228.224.56:8000/avatars/${userData.avatar}` : '/path/to/default/avatar.jpg'
           };
         } catch (error) {
           console.error('Erro ao buscar dados do usuário:', error);

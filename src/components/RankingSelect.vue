@@ -1,21 +1,19 @@
 <template>
   <div
-      class="custom-select"
-      :class="{ 'open': dropdownOpen }"
-      @click="toggleDropdown"
-      @click.stop
+    class="custom-select"
+    :class="{ 'open': dropdownOpen }"
   >
-    <div class="selected-option">
+    <div class="selected-option" @click="toggleDropdown">
       <img :src="selectedOption.image" class="ranking-icon" v-if="selectedOption.image" />
       {{ selectedOption.text }}
     </div>
     <div class="dropdown" v-if="dropdownOpen">
       <div
-          class="option"
-          v-for="(option, index) in filteredOptions"
-          :key="option.value"
-          @click="selectOption(option)"
-          :class="{ 'even': index % 2 === 0, 'odd': index % 2 !== 0, 'selected': option.value === selectedOption.value }"
+        class="option"
+        v-for="(option, index) in filteredOptions"
+        :key="option.value"
+        @click.stop="selectOption(option)"
+        :class="{ 'even': index % 2 === 0, 'odd': index % 2 !== 0, 'selected': option.value === selectedOption.value }"
       >
         <img :src="option.image" class="ranking-icon" v-if="option.image" />
         {{ option.text }}

@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <img :src="player.avatar ? `http://localhost:8000/avatars/${player.avatar}` : '/path/to/default/avatar.jpg'" alt="Avatar" class="avatar" />
+    <img :src="player.avatar ? `http://4.228.224.56:8000/avatars/${player.avatar}` : '/path/to/default/avatar.jpg'" alt="Avatar" class="avatar" />
     <div class="card-info">
       <p><strong>{{ player.username }}</strong></p>
       <p><strong>Ranking:</strong> {{ player.rank }}</p>

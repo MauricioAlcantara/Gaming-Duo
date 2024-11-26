@@ -94,7 +94,7 @@ export default {
             username: userData.username,
             email: userData.email,
             gamename: userData.gamename || 'Não Encontrado',
-            avatar: userData.avatar ? `http://localhost:8000/avatars/${userData.avatar}` : '/path/to/default/avatar.jpg',
+            avatar: userData.avatar ? `http://4.228.224.56:8000/avatars/${userData.avatar}` : '/path/to/default/avatar.jpg',
             rank: userData.rank || 'Não Encontrado',
             preferred_agent: userData.preferred_agent || 'Não Escolhido',
             preferred_function: userData.preferred_function || 'Não Escolhida'

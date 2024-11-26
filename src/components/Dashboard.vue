@@ -13,14 +13,21 @@
         <label for="role">Função</label>
         <FuncaoSelect :options="roles" v-model="filters.role" />
       </div>
-      <button @click="searchDuos" class="search-btn">Buscar</button>
+      <div class="buttons">
+        <button @click="clearFilters" class="clear-btn">Limpar</button>
+        <button @click="searchDuos" class="search-btn">Buscar</button>
+      </div>
     </div>
 
     <div class="recommended-section">
       <h2 class="recommended-title">Jogadores Recomendados</h2>
       <div class="recommended-players-container">
         <div class="recommended-players">
-          <PlayerCard v-for="player in recommendedPlayers" :key="player.id" :player="player" />
+          <PlayerCard
+            v-for="player in recommendedPlayers"
+            :key="player.id"
+            :player="player"
+          />
         </div>
       </div>
     </div>
@@ -29,7 +36,11 @@
       <h2 class="filtered-title">Jogadores Filtrados</h2>
       <div class="filtered-players-container">
         <div class="filtered-players">
-          <PlayerCard v-for="player in filteredPlayers" :key="player.id" :player="player" />
+          <PlayerCard
+            v-for="player in filteredPlayers"
+            :key="player.id"
+            :player="player"
+          />
         </div>
       </div>
     </div>
@@ -50,7 +61,7 @@ export default {
     RankingSelect,
     FuncaoSelect,
     GameSelect,
-    PlayerCard
+    PlayerCard,
   },
   data() {
     return {
@@ -58,7 +69,7 @@ export default {
       filters: {
         game: 'Valorant',
         ranking: 'Não Selecionado',
-        role: 'Não Selecionado'
+        role: 'Não Selecionado',
       },
       recommendedPlayers: [],
       filteredPlayers: [],
@@ -95,11 +106,11 @@ export default {
         { value: 'Controlador', text: 'Controlador', image: '/images/IconControlador.png' },
         { value: 'Duelista', text: 'Duelista', image: '/images/IconDuelista.png' },
         { value: 'Iniciador', text: 'Iniciador', image: '/images/IconIniciador.png' },
-        { value: 'Sentinela', text: 'Sentinela', image: '/images/IconSentinela.png' }
+        { value: 'Sentinela', text: 'Sentinela', image: '/images/IconSentinela.png' },
       ],
       games: [
-        { value: 'Valorant', text: 'Valorant', image: '/images/IconValorant.png' }
-      ]
+        { value: 'Valorant', text: 'Valorant', image: '/images/IconValorant.png' },
+      ],
     };
   },
   created() {
@@ -123,10 +134,10 @@ export default {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('http://localhost:8000/api/usuario/recommended', {
+          const response = await axios.get('http://4.228.224.56:8000/api/usuario/recommended', {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           });
           this.recommendedPlayers = response.data;
         } catch (error) {
@@ -138,21 +149,33 @@ export default {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.post('http://localhost:8000/api/usuario/filter', this.filters, {
-            headers: {
-              Authorization: `Bearer ${token}`
+          const response = await axios.post(
+            'http://4.228.224.56:8000/api/usuario/filter',
+            this.filters,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-          });
+          );
           this.filteredPlayers = response.data;
         } catch (error) {
           console.error('Erro ao buscar jogadores filtrados:', error);
         }
       }
-    }
+    },
+    clearFilters() {
+      this.filters = {
+        game: 'Valorant',
+        ranking: 'Não Selecionado',
+        role: 'Não Selecionado',
+      };
+      this.filteredPlayers = [];
+    },
   },
   mounted() {
     console.log('Dashboard carregado com sucesso.');
-  }
+  },
 };
 </script>
 
@@ -186,91 +209,10 @@ export default {
   margin-bottom: 5px;
 }
 
-.custom-select {
-  position: relative;
-  width: 200px;
-}
-
-.custom-select select {
-  width: 100%;
-  padding: 10px;
-  font-size: 15px;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background-color: #333;
-  color: white;
-  appearance: none;
-  height: 40px;
-  line-height: 40px;
-}
-
-.custom-select::after {
-  content: '▼';
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: white;
-  font-size: 12px;
-}
-
-.recommended-section,
-.filtered-section {
+.buttons {
+  display: flex;
+  gap: 10px;
   margin-top: 25px;
-  width: 100%;
-  max-width: 800px;
-}
-
-.recommended-title,
-.filtered-title {
-  margin: 20px 0 10px;
-  color: white;
-  text-align: center;
-}
-
-/* Estilo padrão para a barra de rolagem */
-::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
-
-
-::-webkit-scrollbar-track {
-  background: #2b2b2b;
-  border-radius: 10px;
-}
-
-
-::-webkit-scrollbar-thumb {
-  background-color: #333;
-  border-radius: 10px;
-  border: 3px solid #2b2b2b;
-}
-
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: #333;
-}
-.recommended-players-container,
-.filtered-players-container {
-  border: 1px solid #444;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  max-height: 400px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.recommended-players,
-.filtered-players {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
 }
 
 button {
@@ -295,6 +237,68 @@ button.search-btn {
   height: 40px;
   display: flex;
   align-items: center;
+}
+
+button.clear-btn {
+  background-color: #555;
+}
+
+button.clear-btn:hover {
+  background-color: #444;
+}
+
+.recommended-section,
+.filtered-section {
   margin-top: 25px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.recommended-title,
+.filtered-title {
+  margin: 20px 0 10px;
+  color: white;
+  text-align: center;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2b2b2b;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #333;
+  border-radius: 10px;
+  border: 3px solid #2b2b2b;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #333;
+}
+
+.recommended-players-container,
+.filtered-players-container {
+  border: 1px solid #444;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.recommended-players,
+.filtered-players {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
 }
 </style>
