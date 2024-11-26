@@ -18,12 +18,18 @@
                :style="showPasswordRequired ? 'border-color: #f90404' : ''">
         <p v-if="showPasswordRequired" class="error-message">É necessário informar uma senha.</p>
       </div>
-      <button type="submit">Entrar</button>
+      <button type="submit" :disabled="isLoading">
+        <span v-if="isLoading" class="spinner"></span>
+        <span v-else>Entrar</span>
+      </button>
       <div class="footer-links">
         <p class="password-reset" @click="toggleResetPasswordModal">Esqueceu sua senha?</p>
         <p class="register-link" @click="goToRegister">Cadastre-se</p>
       </div>
     </form>
+    <div v-if="notification.message" :class="['notification', notification.type]">
+      {{ notification.message }}
+    </div>
     <div v-if="showResetPasswordModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="toggleResetPasswordModal">&times;</span>
@@ -54,7 +60,12 @@ export default {
       showResetPasswordModal: false,
       resetEmail: '',
       resetStatus: '',
-      resetError: ''
+      resetError: '',
+      isLoading: false,
+      notification: {
+        message: '',
+        type: ''
+      }
     };
   },
   methods: {
@@ -63,6 +74,9 @@ export default {
       this.showPasswordRequired = !this.loginData.password;
 
       if (!this.showEmailRequired && !this.showPasswordRequired) {
+        this.isLoading = true;
+        this.notification = { message: '', type: '' };
+
         try {
           const response = await login({
             email: this.loginData.email,
@@ -70,17 +84,19 @@ export default {
           });
 
           if (response.data.success) {
-            alert('Login realizado com sucesso!');
+            this.notification = { message: 'Login realizado com sucesso!', type: 'success' };
             localStorage.setItem('token', response.data.token);
-            this.$router.push({ name: 'dashboard' }).then(() => {
-              window.location.reload();
-            });
+            setTimeout(() => {
+              this.$router.push({ name: 'dashboard' });
+            }, 1500);
           } else {
-            alert('Erro ao fazer login. Verifique suas credenciais.');
+            this.notification = { message: 'Erro ao fazer login. Verifique suas credenciais.', type: 'error' };
           }
         } catch (error) {
           console.error('Erro ao fazer login:', error);
-          alert('Erro ao fazer login. Por favor, tente novamente mais tarde.');
+          this.notification = { message: 'Erro ao fazer login. Por favor, tente novamente mais tarde.', type: 'error' };
+        } finally {
+          this.isLoading = false;
         }
       }
     },
@@ -97,24 +113,24 @@ export default {
       this.resetStatus = '';
       this.resetError = '';
     },
-    async sendResetLink() {
-      try {
-        // eslint-disable-next-line no-unused-vars
-        const response = await requestPasswordReset(this.resetEmail);
-        this.resetStatus = 'Link de redefinição de senha enviado para o e-mail fornecido.';
-        this.resetError = '';
-        this.toggleResetPasswordModal();
-      } catch (error) {
-        console.error('Erro ao enviar link de redefinição de senha:', error);
-        this.resetError = 'Erro ao enviar link de redefinição de senha. Verifique o e-mail e tente novamente.';
-        this.resetStatus = '';
-      }
-    },
+async sendResetLink() {
+  try {
+    await requestPasswordReset(this.resetEmail); // Removida a variável 'response'
+    this.resetStatus = 'Link de redefinição de senha enviado para o e-mail fornecido.';
+    this.resetError = '';
+    this.toggleResetPasswordModal();
+  } catch (error) {
+    console.error('Erro ao enviar link de redefinição de senha:', error);
+    this.resetError = 'Erro ao enviar link de redefinição de senha. Verifique o e-mail e tente novamente.';
+    this.resetStatus = '';
+  }
+}
+,
     goToRegister() {
       this.$router.push({ name: 'cadastro' });
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -157,25 +173,52 @@ export default {
   margin-top: 10px;
   transition: background-color 0.3s;
   font-size: 15px;
-}
-
-.login-form button:hover {
-  background-color: #cc0303;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  color: #ccc;
-}
-
-.footer-links {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form button[disabled] {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.spinner {
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.notification.success {
+  background-color: #28a745;
+}
+
+.notification.error {
+  background-color: #dc3545;
 }
 
 .password-reset, .register-link {
@@ -185,36 +228,8 @@ label {
   text-decoration: underline;
 }
 
-.modal {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  text-align: center;
-  margin-top: 50px;
-  box-sizing: border-box;
-}
-
-.close {
-  float: right;
-  cursor: pointer;
-  font-size: 28px;
-}
-
-.close:hover {
-  color: red;
+.password-reset:hover, .register-link:hover {
+  color: white;
 }
 
 input[type="email"], input[type="password"] {
@@ -229,27 +244,19 @@ input[type="email"], input[type="password"] {
   outline: none;
 }
 
-.required {
-  color: #f90404;
+input[type="email"]:focus, input[type="password"]:focus {
+  border-color: #f90404;
+  box-shadow: 0 0 5px rgba(249, 4, 4, 0.5);
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
 
 .error-message {
   color: #f90404;
   margin-top: 6px;
   font-size: 13px;
-}
-
-input[type="text"], input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #4c4c4c;
-  background-color: #212121;
-  border-radius: 4px;
-  box-sizing: border-box;
-  color: #fff;
-  font-size: 15px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  outline: none;
 }
 
 .reset-button {
@@ -267,5 +274,17 @@ input[type="text"], input[type="password"] {
 
 .reset-button:hover {
   background-color: #cc0303;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: #ccc;
 }
 </style>
