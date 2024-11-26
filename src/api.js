@@ -74,7 +74,7 @@ export const sendConnectionRequest = (receiverId, token) => {
 };
 
 export const getNotifications = (token) => {
-    return api.get('/notifications/pending', {
+    return api.get('/notifications', {
         headers: {
             'Authorization': `Bearer ${token}`
         }
