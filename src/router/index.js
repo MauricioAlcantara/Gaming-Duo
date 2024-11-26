@@ -6,6 +6,7 @@ import CadastroForm from "@/components/Cadastro.vue";
 import UserProfile from '@/components/UserProfile.vue';
 import PasswordReset from "@/components/PasswordReset.vue";
 import UserProfileView from '@/components/UserProfileView.vue';
+import MatchesHistory from '@/components/MatchesHistory.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -51,7 +52,13 @@ const router = createRouter({
             path: '/:username', // Define o parâmetro username na URL
             name: 'UserProfileView',
             component: () => import('@/components/UserProfileView.vue')
-          }          
+          },
+        
+          {
+            path: '/matches',
+            name: 'MatchesHistory',
+            component: MatchesHistory
+        },
     ]
 });
 
