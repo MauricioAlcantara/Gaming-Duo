@@ -5,7 +5,7 @@
       <div class="player-info">
         <!-- Nome e imagem do usuário logado -->
         <div class="user-info">
-          <img :src="loggedUserImage ? loggedUserImage : '/path/to/default/avatar.jpg'" alt="Sua Imagem" class="user-image" />
+          <img src="images/logo.png" alt="Sua Imagem" class="user-image" />
           <p>{{ loggedUserName }}</p>
         </div>
 
@@ -15,10 +15,10 @@
           <font-awesome-icon icon="arrow-down" class="arrow-icon" />
         </div>
 
-        <!-- Nome e imagem do jogador que enviou a notificação -->
+        <!-- Nome e imagem do jogador conectado -->
         <div class="user-info">
-          <img :src="notification.userImage ? notification.userImage : '/path/to/default/avatar.jpg'" alt="Imagem do Jogador" class="user-image" />
-          <p>{{ notification.userName }}</p>
+          <img src="/images/logo.png" alt="Imagem do Jogador" class="user-image" />
+          <p>{{ connectedPlayerNick }}</p>
         </div>
       </div>
 
@@ -54,11 +54,14 @@ export default {
       type: Object,
       required: true,
     },
+    connectedPlayerNick: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
       loggedUserName: '',
-      loggedUserImage: '',
       chatMessages: [], // Armazena as mensagens trocadas
       newMessage: '', // Armazena a nova mensagem que está sendo digitada
     };
@@ -68,8 +71,7 @@ export default {
       try {
         const response = await getUser(localStorage.getItem('token')); // Pega o usuário logado pelo token
         const userData = response.data.usuario;
-        this.loggedUserName = userData.username; // Atualiza o nome
-        this.loggedUserImage = userData.avatar ? `http://localhost:8000/avatars/${userData.avatar}` : '/path/to/default/avatar.jpg'; // Atualiza a imagem
+        this.loggedUserName = userData.username; // Atualiza o nome do usuário logado
       } catch (error) {
         console.error('Erro ao buscar o usuário logado:', error);
       }
@@ -82,11 +84,11 @@ export default {
     },
     closeModal() {
       this.$emit('close');
-    }
+    },
   },
   mounted() {
     this.fetchLoggedUser();
-  }
+  },
 };
 </script>
 

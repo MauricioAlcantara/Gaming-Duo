@@ -4,12 +4,12 @@
     <div v-if="dropdownOpen" class="dropdown-content" ref="dropdown">
       <div class="arrow-up"></div>
       <ul>
-        <li v-for="(notification, index) in notifications" :key="index">
+        <li v-for="(notification, index) in notifications" :key="notification.id">
           <div class="notification-item">
             <span @click.stop="handleNotificationClick(notification, index)">
               {{ notification.sender_nick }} se conectou com você para jogarem juntos!
             </span>
-            <button class="close-btn" @click.stop="removeNotification(index)">X</button>
+            <button class="close-btn" @click.stop="removeNotification(notification.id, index)">X</button>
           </div>
         </li>
       </ul>
@@ -24,27 +24,33 @@
     </div>
 
     <!-- Modal de Conexão -->
-    <ModalComponent v-if="isConnectionModalOpen" @close="closeConnectionModal" :notification="selectedNotification" />
+    <ModalComponent
+        v-if="isConnectionModalOpen"
+        @close="closeConnectionModal"
+        :notification="selectedNotification"
+        :connectedPlayerNick="connectedPlayerNick"
+    />
   </div>
 </template>
 
 <script>
-import { getNotifications } from '../api'; // Importa a função para buscar as notificações
+import { getNotifications, deleteNotification } from '../api'; // Importa os métodos da API
 import ModalComponent from './ConnectionModal.vue'; // Importa o modal
 
 export default {
   components: {
-    ModalComponent, // Registrar o modal
+    ModalComponent,
   },
   data() {
     return {
       dropdownOpen: false,
-      isDecisionModalOpen: false, // Controle para o modal de decisão
-      isConnectionModalOpen: false, // Controle para o modal de conexão
-      decisionNotification: null, // Guarda a notificação selecionada para decisão
-      decisionIndex: null, // Guarda o índice da notificação na lista
-      selectedNotification: null, // Guarda a notificação clicada
-      notifications: [] // Inicializa como um array vazio
+      isDecisionModalOpen: false,
+      isConnectionModalOpen: false,
+      decisionNotification: null,
+      decisionIndex: null,
+      selectedNotification: null,
+      connectedPlayerNick: '', // Guarda o nick do jogador conectado
+      notifications: [],
     };
   },
   methods: {
@@ -61,42 +67,45 @@ export default {
     },
     handleNotificationClick(notification, index) {
       if (notification.isAccepted) {
-        // Vai diretamente para o modal de conexão
+        // Já aceito, vai diretamente para o modal de conexão
         this.openConnectionModal(notification);
       } else {
         // Exibe o modal de decisão
+        this.connectedPlayerNick = notification.sender_nick; // Salva o nick do jogador conectado
         this.showDecisionModal(notification, index);
       }
     },
     showDecisionModal(notification, index) {
-      this.closeDropdown(); // Fecha o dropdown de notificações
-      this.decisionNotification = notification; // Define a notificação para o modal de decisão
-      this.decisionIndex = index; // Salva o índice da notificação
-      this.isDecisionModalOpen = true; // Abre o modal de decisão
+      this.closeDropdown();
+      this.decisionNotification = notification;
+      this.decisionIndex = index;
+      this.isDecisionModalOpen = true;
     },
     acceptConnection() {
-      // Marca a notificação como aceita
       this.decisionNotification.isAccepted = true;
-
-      this.isDecisionModalOpen = false; // Fecha o modal de decisão
-      this.openConnectionModal(this.decisionNotification); // Abre o modal de conexão
+      this.isDecisionModalOpen = false;
+      this.openConnectionModal(this.decisionNotification);
     },
-    rejectConnection() {
-      this.isDecisionModalOpen = false; // Fecha o modal de decisão
-      this.removeNotification(this.decisionIndex); // Remove a notificação
+    async rejectConnection() {
+      try {
+        await this.removeNotification(this.decisionNotification.id, this.decisionIndex);
+        this.isDecisionModalOpen = false;
+      } catch (error) {
+        console.error('Erro ao rejeitar notificação:', error);
+      }
     },
     openConnectionModal(notification) {
-      this.closeDropdown(); // Fecha o dropdown de notificações
-      this.selectedNotification = notification; // Define a notificação selecionada
-      this.isConnectionModalOpen = true; // Abre o modal de conexão
+      this.closeDropdown();
+      this.connectedPlayerNick = notification.sender_nick; // Garante que o nick do jogador conectado seja carregado
+      this.selectedNotification = notification;
+      this.isConnectionModalOpen = true;
     },
     closeConnectionModal() {
-      this.isConnectionModalOpen = false; // Fecha o modal de conexão
-      this.closeDropdown(); // Garante que o dropdown permaneça fechado
+      this.isConnectionModalOpen = false;
+      this.closeDropdown();
     },
     async fetchNotifications() {
-      // Obtém o token armazenado
-      const token = localStorage.getItem('token'); // Supondo que o token esteja armazenado no localStorage
+      const token = localStorage.getItem('token');
 
       if (!token) {
         console.error('Token não encontrado');
@@ -109,7 +118,7 @@ export default {
         // Adiciona a propriedade `isAccepted` às notificações
         this.notifications = response.data.notifications.map((notification) => ({
           ...notification,
-          isAccepted: false // Inicialmente, nenhuma notificação está aceita
+          isAccepted: false,
         }));
 
         console.log('Notificações carregadas:', this.notifications);
@@ -117,22 +126,47 @@ export default {
         console.error('Erro ao carregar notificações:', error);
       }
     },
-    removeNotification(index) {
-      this.notifications.splice(index, 1); // Remove a notificação localmente
-      // Opcional: enviar uma requisição para o backend para remover a notificação
-    }
+    async removeNotification(notificationId, index) {
+      try {
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+          console.error('Token não encontrado');
+          return;
+        }
+
+        const response = await deleteNotification(notificationId, token);
+        if (response.status === 200) {
+          console.log(response.data.message);
+          this.notifications.splice(index, 1); // Remove a notificação localmente
+        }
+      } catch (error) {
+        console.error('Erro ao deletar notificação:', error.response ? error.response.data : error);
+      }
+    },
+  },
+  watch: {
+    'EventBus.newNotification': {
+      handler(newNotification) {
+        if (newNotification) {
+          this.notifications.push(newNotification);
+          console.log('Notificação adicionada:', newNotification);
+        }
+      },
+      immediate: true,
+    },
   },
   mounted() {
     document.addEventListener('click', this.handleClickOutside);
-
-    // Carregar notificações quando o componente for montado
     this.fetchNotifications();
   },
   beforeUnmount() {
     document.removeEventListener('click', this.handleClickOutside);
-  }
+  },
 };
 </script>
+
+
 
 <style scoped>
 /* Seu CSS permanece o mesmo */

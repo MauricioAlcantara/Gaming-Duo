@@ -79,6 +79,14 @@ export const getNotifications = (token) => {
     });
 };
 
+export const deleteNotification = (notificationId, token) => {
+    return api.delete(`/notifications/${notificationId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
 export const sendNotification = (data) => {
     return api.post('/sendNotification', data);
 };
