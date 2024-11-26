@@ -223,11 +223,16 @@ button {
   cursor: pointer;
   border-radius: 5px;
   font-size: 15px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 button:hover {
   background-color: #c20303;
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
 }
 
 button.search-btn {
@@ -237,14 +242,30 @@ button.search-btn {
   height: 40px;
   display: flex;
   align-items: center;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button.search-btn:hover {
+  background-color: #b00202;
+  transform: scale(1.05);
+}
+
+button.search-btn:active {
+  transform: scale(0.95);
 }
 
 button.clear-btn {
   background-color: #555;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 button.clear-btn:hover {
   background-color: #444;
+  transform: scale(1.05);
+}
+
+button.clear-btn:active {
+  transform: scale(0.95);
 }
 
 .recommended-section,
