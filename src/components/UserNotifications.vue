@@ -7,7 +7,7 @@
         <li v-for="(notification, index) in notifications" :key="notification.id">
           <div class="notification-item">
             <span
-              v-if="!notification.isAccepted"
+              v-if="notification.status !== 'accepted'"
               @click.stop="handleNotificationClick(notification, index)"
             >
               {{ notification.sender_nick }} se conectou com você para jogarem juntos!
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getNotifications, deleteNotification } from "../api"; // Importa os métodos da API
+import { getNotifications, deleteNotification, acceptNotification } from "../api"; // Importa os métodos da API
 
 export default {
   data() {
@@ -75,7 +75,7 @@ export default {
         console.error("sender_username ausente na notificação:", notification);
         return;
       }
-      if (!notification.isAccepted) {
+      if (notification.status !== 'accepted') {
         // Exibe o modal de decisão
         this.showDecisionModal(notification, index);
       } else {
@@ -89,10 +89,28 @@ export default {
       this.decisionIndex = index;
       this.isDecisionModalOpen = true;
     },
-    acceptConnection() {
-      // Atualiza o estado da notificação para aceito
-      this.notifications[this.decisionIndex].isAccepted = true;
-      this.isDecisionModalOpen = false;
+    async acceptConnection() {
+      try {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          console.error("Token não encontrado");
+          return;
+        }
+
+        const notificationId = this.decisionNotification.id;
+
+        // Chama a API para aceitar a notificação
+        const response = await acceptNotification(notificationId, token);
+
+        if (response.status === 200) {
+          // Atualiza o status da notificação para 'accepted'
+          this.notifications[this.decisionIndex].status = 'accepted';
+          this.isDecisionModalOpen = false;
+        }
+      } catch (error) {
+        console.error("Erro ao aceitar a conexão:", error);
+      }
     },
     async rejectConnection() {
       try {
@@ -116,11 +134,10 @@ export default {
       try {
         const response = await getNotifications(token);
 
-        // Adiciona a propriedade `isAccepted` às notificações
+        // Atualiza as notificações com os dados do servidor
         this.notifications = response.data.notifications.map((notification) => ({
           ...notification,
-          isAccepted: false,
-          sender_username: notification.sender_username || notification.sender_nick, // Verifica a fonte do dado
+          sender_username: notification.sender_username || notification.sender_nick,
         }));
 
         console.log("Notificações carregadas:", this.notifications);

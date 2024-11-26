@@ -90,8 +90,9 @@ export const deleteNotification = (notificationId, token) => {
 };
 
 // Adicionando a função acceptNotification
+// Atualizando a função acceptNotification para usar PUT
 export const acceptNotification = (notificationId, token) => {
-    return api.post(`/notifications/${notificationId}/accept`, {}, {
+    return api.put(`/notifications/${notificationId}/accept`, {}, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
