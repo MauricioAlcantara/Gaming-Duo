@@ -201,7 +201,6 @@
   
   th,
   td {
-    text-align: left;
     padding: 12px;
     border-bottom: 1px solid #444;
   }
@@ -235,14 +234,17 @@
   
   .status-confirmed {
     color: #4caf50;
+    font-weight: bold;
   }
   
   .status-pending {
     color: #ff9800;
+    font-weight: bold;
   }
   
   .status-rejected {
     color: #f44336;
+    font-weight: bold;
   }
   
   td {
@@ -252,4 +254,20 @@
   .title {
     margin-top: 100px;
   }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    text-align: center;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    text-align: center;
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    text-align: right;
+  }
+
   </style>
