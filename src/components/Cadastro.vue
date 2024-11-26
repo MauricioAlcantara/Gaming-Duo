@@ -34,8 +34,14 @@
                :style="showConfirmPasswordRequired ? 'border-color: #f90404' : ''">
         <p v-if="showConfirmPasswordRequired" class="error-message">As senhas não coincidem.</p>
       </div>
-      <button type="submit" class="login-button">Cadastrar</button>
+      <button type="submit" class="login-button" :disabled="isLoading">
+        <span v-if="isLoading" class="spinner"></span>
+        <span v-else>Cadastrar</span>
+      </button>
     </form>
+    <div v-if="notification.message" :class="['notification', notification.type]">
+      {{ notification.message }}
+    </div>
   </div>
 </template>
 
@@ -55,7 +61,12 @@ export default {
       showUsernameRequired: false,
       showEmailRequired: false,
       showPasswordRequired: false,
-      showConfirmPasswordRequired: false
+      showConfirmPasswordRequired: false,
+      isLoading: false,
+      notification: {
+        message: '',
+        type: ''
+      }
     };
   },
   methods: {
@@ -66,6 +77,9 @@ export default {
       this.showConfirmPasswordRequired = this.registerData.password !== this.registerData.confirmPassword;
 
       if (!this.showUsernameRequired && !this.showEmailRequired && !this.showPasswordRequired && !this.showConfirmPasswordRequired) {
+        this.isLoading = true;
+        this.notification = { message: '', type: '' };
+
         try {
           const response = await register({
             username: this.registerData.username,
@@ -74,13 +88,18 @@ export default {
           });
 
           if (response.data.usuario) {
-            alert('Cadastro realizado com sucesso!');
-            this.$router.push({ name: 'login' });
+            this.notification = { message: 'Cadastro realizado com sucesso!', type: 'success' };
+            setTimeout(() => {
+              this.$router.push({ name: 'login' });
+            }, 1500);
           } else {
-            alert('Erro ao cadastrar usuário.');
+            this.notification = { message: 'Erro ao cadastrar usuário.', type: 'error' };
           }
         } catch (error) {
           console.error('Erro ao cadastrar:', error);
+          this.notification = { message: 'Erro ao cadastrar. Tente novamente mais tarde.', type: 'error' };
+        } finally {
+          this.isLoading = false;
         }
       }
     },
@@ -99,7 +118,7 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -132,12 +151,12 @@ export default {
 }
 
 .form-group {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   color: #ccc;
 }
 
@@ -173,9 +192,92 @@ input[type="text"], input[type="email"], input[type="password"] {
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-button[disabled] {
+  background-color: #999;
+  cursor: not-allowed;
 }
 
 .login-button:hover {
   background-color: #cc0303;
+}
+
+.spinner {
+  border: 3px solid transparent;
+  border-top: 3px solid white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  animation: fadeIn 0.5s ease-in-out, fadeOut 0.5s 3s ease-in-out;
+}
+
+.notification.success {
+  background-color: #28a745;
+  color: white;
+}
+
+.notification.error {
+  background-color: #dc3545;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+
+.form-group input {
+  margin-top: 5px; /* Adicionado para criar espaço entre o rótulo e o campo */
+}
+
+.form-group p {
+  margin-top: 5px; /* Adicionado para criar espaço entre o campo e a mensagem de erro */
+}
+
+input:focus {
+  border-color: #f90404;
+  box-shadow: 0 0 5px rgba(249, 4, 4, 0.5);
+}
+
+@media (max-width: 768px) {
+  .login-form {
+    padding: 15px 30px 30px;
+    max-width: 100%;
+  }
 }
 </style>
