@@ -1,3 +1,4 @@
+// api.js
 import axios from 'axios';
 
 const api = axios.create({
@@ -47,8 +48,9 @@ export const updateAvatar = (formData, token) => {
         }
     });
 };
+
 export async function updateValorantStats(gamename, rank, token) {
-    return axios.put('/api/valorant', { gamename, rank }, {
+    return api.put('/valorant', { gamename, rank }, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -81,6 +83,15 @@ export const getNotifications = (token) => {
 
 export const deleteNotification = (notificationId, token) => {
     return api.delete(`/notifications/${notificationId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+// Adicionando a função acceptNotification
+export const acceptNotification = (notificationId, token) => {
+    return api.post(`/notifications/${notificationId}/accept`, {}, {
         headers: {
             Authorization: `Bearer ${token}`,
         },
