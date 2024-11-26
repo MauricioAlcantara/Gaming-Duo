@@ -8,7 +8,6 @@
     </div>
     <div class="card-actions">
       <button @click="connectPlayer(player.id)" class="connect-btn">Conectar</button>
-      <button @click="goToPlayerProfile(player.username)" class="profile-btn">Perfil</button>
     </div>
   </div>
 </template>
