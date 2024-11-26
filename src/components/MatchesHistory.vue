@@ -44,7 +44,7 @@
                   class="disabled-button"
                   disabled
                 >
-                  Não Disponível
+                  Indisponível
                 </button>
               </td>
             </tr>
@@ -212,7 +212,7 @@
   
   .view-profile-button {
     padding: 8px 12px;
-    background-color: #4caf50;
+    background-color: #b00202;
     border: none;
     border-radius: 5px;
     color: white;
@@ -221,7 +221,7 @@
   }
   
   .view-profile-button:hover {
-    background-color: #45a049;
+    background-color: #b00202;
   }
   
   .disabled-button {
