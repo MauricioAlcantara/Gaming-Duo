@@ -5,6 +5,7 @@ import UserLogin from "@/components/UserLogin.vue";
 import CadastroForm from "@/components/Cadastro.vue";
 import UserProfile from '@/components/UserProfile.vue';
 import PasswordReset from "@/components/PasswordReset.vue";
+import UserProfileView from '@/components/UserProfileView.vue';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -39,6 +40,18 @@ const router = createRouter({
             name: 'PasswordReset',
             component: PasswordReset
         },
+        {
+            path: '/:username',
+            name: 'userProfileView',
+            component: UserProfileView,
+            props: true,
+          },
+
+          {
+            path: '/:username', // Define o parâmetro username na URL
+            name: 'UserProfileView',
+            component: () => import('@/components/UserProfileView.vue')
+          }          
     ]
 });
 

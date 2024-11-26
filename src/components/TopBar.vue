@@ -2,13 +2,15 @@
   <div class="top-bar">
     <img src="/images/logo.png" alt="Logo" class="logo" @click="goToHome">
     <span class="site-name" @click="goToHome">Gaming Duo</span>
-    <nav v-if="!['dashboard', 'login', 'cadastro', 'UserProfile', 'PasswordReset'].includes(this.$route.name)">
+    <!-- Ajustando as rotas para tratar UserProfileView como dashboard e UserProfile -->
+    <nav v-if="!['dashboard', 'login', 'cadastro', 'UserProfile', 'UserProfileView', 'PasswordReset'].includes(this.$route.name)">
       <button @click="scrollToSection('quem-somos-section')">Sobre Nós</button>
       <button @click="$emit('toggle-chat')">Ajuda</button>
       <button class="button-login" @click="goToRoute('login')">Entrar</button>
       <button class="button-register" @click="goToRoute('cadastro')">Cadastrar-se</button>
     </nav>
-    <nav v-else-if="['dashboard', 'UserProfile'].includes(this.$route.name)">
+    <!-- Adicionando UserProfileView para exibir os botões de perfil, ajuda e notificações -->
+    <nav v-else-if="['dashboard', 'UserProfile', 'UserProfileView'].includes(this.$route.name)">
       <UserNotifications />
       <button @click="$emit('toggle-chat')">Ajuda</button>
       <div class="dropdown">
@@ -73,7 +75,7 @@ export default {
     goToHome() {
       if (this.$route.name === 'dashboard') {
         window.scrollTo(0, 0);
-      } else if (this.$route.name === 'UserProfile') {
+      } else if (['UserProfile', 'UserProfileView'].includes(this.$route.name)) {
         this.$router.push({ name: 'dashboard' });
       } else {
         this.$router.push({ name: 'home' });
@@ -81,9 +83,6 @@ export default {
     },
     goToRoute(routeName) {
       this.$router.push({ name: routeName });
-    },
-    openHelpChat() {
-      this.$parent.$refs.chatComponent.openChat();
     },
     scrollToSection(sectionId) {
       const section = document.getElementById(sectionId);

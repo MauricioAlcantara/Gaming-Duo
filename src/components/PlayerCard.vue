@@ -6,7 +6,10 @@
       <p><strong>Ranking:</strong> {{ player.rank }}</p>
       <p><strong>Função:</strong> {{ player.preferred_function }}</p>
     </div>
-    <button @click="connectPlayer(player.id)" class="connect-btn">Conectar</button>
+    <div class="card-actions">
+      <button @click="connectPlayer(player.id)" class="connect-btn">Conectar</button>
+      <button @click="goToPlayerProfile(player.username)" class="profile-btn">Perfil</button>
+    </div>
   </div>
 </template>
 
@@ -22,35 +25,29 @@ export default {
     }
   },
   methods: {
-    async connectPlayer(playerId) {
-      console.log(`Conectando com o jogador ${playerId}`);
-
-      // Obter o token do jogador logado (usando Vuex ou localStorage)
-      const token = localStorage.getItem('token'); // Certifique-se de que o token está sendo armazenado corretamente
-
-      if (!token) {
-        console.error('Erro: Token não encontrado');
-        return;
-      }
-
-      // Enviar a solicitação de conexão via API
-      try {
-        const response = await sendConnectionRequest(playerId, token);
-
-        // Exibir a resposta completa no console para inspeção
-        console.log('Resposta da API:', response);
-
-        // Verifique se a API retorna o objeto notification
-        if (response.data && response.data.notification) {
-          console.log('Notificação enviada:', response.data.notification); // Exibe a notificação
-        } else {
-          console.log('Nenhuma notificação encontrada na resposta da API');
-        }
-      } catch (error) {
-        console.error('Erro ao conectar:', error.response ? error.response.data : error);
-      }
+  async connectPlayer(playerId) {
+    console.log(`Conectando com o jogador ${playerId}`);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Erro: Token não encontrado');
+      return;
     }
+    try {
+      const response = await sendConnectionRequest(playerId, token);
+      console.log('Resposta da API:', response);
+      if (response.data && response.data.notification) {
+        console.log('Notificação enviada:', response.data.notification);
+      } else {
+        console.log('Nenhuma notificação encontrada na resposta da API');
+      }
+    } catch (error) {
+      console.error('Erro ao conectar:', error.response ? error.response.data : error);
+    }
+  },
+  goToPlayerProfile(username) {
+    this.$router.push({ name: 'UserProfileView', params: { username } });
   }
+}
 }
 </script>
 
@@ -81,7 +78,12 @@ export default {
   margin: 5px 0;
 }
 
-.connect-btn {
+.card-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.connect-btn, .profile-btn {
   background-color: #e74c3c;
   color: white;
   border: none;
@@ -91,7 +93,8 @@ export default {
   transition: background-color 0.3s;
 }
 
-.connect-btn:hover {
+.connect-btn:hover, .profile-btn:hover {
   background-color: #c0392b;
 }
+
 </style>
