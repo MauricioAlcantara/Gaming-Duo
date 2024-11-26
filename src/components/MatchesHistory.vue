@@ -32,20 +32,34 @@
               </td>
               <td>{{ formatDate(match.created_at) }}</td>
               <td>
-                <button
-                  v-if="match.status === 'Confirmado'"
-                  @click="goToUserProfile(match.username)"
-                  class="view-profile-button"
+                <div
+                  class="actions-dropdown"
+                  @click.stop="toggleDropdown(match.id)"
                 >
-                  Ver Perfil
-                </button>
-                <button
-                  v-else
-                  class="disabled-button"
-                  disabled
-                >
-                  Indisponível
-                </button>
+                  <span class="ellipsis">&#x22EE;</span>
+                  <div v-if="dropdownOpen[match.id]" class="dropdown-menu">
+                    <button
+                      v-if="match.status === 'Confirmado'"
+                      @click="goToUserProfile(match.username)"
+                      class="dropdown-button"
+                    >
+                      Ver Perfil
+                    </button>
+                    <button
+                      v-else
+                      class="dropdown-button disabled"
+                      disabled
+                    >
+                      Indisponível
+                    </button>
+                    <button
+                      @click="revokeDuo(match.id)"
+                      class="dropdown-button revoke-button"
+                    >
+                      Revogar Duo
+                    </button>
+                  </div>
+                </div>
               </td>
             </tr>
             <tr v-if="filteredMatches.length === 0">
@@ -58,23 +72,23 @@
   </template>
   
   <script>
-  import { getMatchesHistory } from "@/api";
+  import { getMatchesHistory, revokeMatch } from "@/api";
   
   export default {
     data() {
       return {
         matches: [],
         search: "",
+        dropdownOpen: {},
       };
     },
     computed: {
       filteredMatches() {
         return this.matches.filter(
           (match) =>
-            match.nick
-              .toLowerCase()
-              .includes(this.search.toLowerCase()) ||
-            match.status.toLowerCase().includes(this.search.toLowerCase())
+            match.status.toLowerCase() !== "recusado" && // Exclui 'Recusado'
+            (match.nick.toLowerCase().includes(this.search.toLowerCase()) ||
+              match.status.toLowerCase().includes(this.search.toLowerCase()))
         );
       },
     },
@@ -116,20 +130,56 @@
         };
       },
       translateStatus(status) {
-        switch(status) {
-            case 'accepted':
-                return 'Confirmado';
-            case 'pending':
-                return 'Pendente';
-            case 'rejected':
-                return 'Recusado';
-            default:
-                return status;
+        switch (status) {
+          case "accepted":
+            return "Confirmado";
+          case "pending":
+            return "Pendente";
+          case "rejected":
+            return "Recusado";
+          default:
+            return status;
+        }
+      },
+      toggleDropdown(matchId) {
+        this.dropdownOpen = { [matchId]: !this.dropdownOpen[matchId] };
+      },
+      closeDropdowns() {
+        this.dropdownOpen = {};
+      },
+      handleClickOutside(event) {
+        if (!this.$el.contains(event.target)) {
+          this.closeDropdowns();
+        }
+      },
+      async revokeDuo(matchId) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("Token não encontrado");
+          return;
+        }
+        try {
+          const response = await revokeMatch(matchId, token);
+          if (response.status === 200) {
+            // Atualiza o status do match para 'Recusado'
+            const match = this.matches.find((m) => m.id === matchId);
+            if (match) {
+              match.status = "Recusado";
+            }
+          } else {
+            console.error("Erro ao revogar duo:", response.data);
+          }
+        } catch (error) {
+          console.error("Erro ao revogar duo:", error);
         }
       },
     },
     mounted() {
       this.fetchMatches();
+      document.addEventListener("click", this.handleClickOutside);
+    },
+    beforeUnmount() {
+      document.removeEventListener("click", this.handleClickOutside);
     },
   };
   </script>
@@ -209,29 +259,6 @@
     background-color: #333;
   }
   
-  .view-profile-button {
-    padding: 8px 12px;
-    background-color: #b00202;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .view-profile-button:hover {
-    background-color: #b00202;
-  }
-  
-  .disabled-button {
-    padding: 8px 12px;
-    background-color: #666;
-    border: none;
-    border-radius: 5px;
-    color: #ccc;
-    cursor: not-allowed;
-  }
-  
   .status-confirmed {
     color: #4caf50;
     font-weight: bold;
@@ -254,20 +281,68 @@
   .title {
     margin-top: 100px;
   }
-
+  
   th:nth-child(2),
   td:nth-child(2) {
     text-align: center;
   }
-
+  
   th:nth-child(3),
   td:nth-child(3) {
     text-align: center;
   }
-
+  
   th:nth-child(4),
   td:nth-child(4) {
     text-align: right;
   }
-
+  
+  /* Styles for actions dropdown */
+  .actions-dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .ellipsis {
+    font-size: 24px;
+    color: #fff;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+    background-color: #222;
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    z-index: 1000;
+    min-width: 150px;
+  }
+  
+  .dropdown-button {
+    display: block;
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 8px;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .dropdown-button:hover {
+    background-color: #333;
+  }
+  
+  .dropdown-button.disabled {
+    color: #666;
+    cursor: not-allowed;
+  }
+  
+  .revoke-button {
+    color: #f44336;
+  }
   </style>
+  

@@ -111,4 +111,13 @@ export const getMatchesHistory = (token) => {
     });
 };
 
+export const revokeMatch = (notificationId, token) => {
+    return api.put(`/notifications/${notificationId}/revoke`, {}, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+
 export default api;
