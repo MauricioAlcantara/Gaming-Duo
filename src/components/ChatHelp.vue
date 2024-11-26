@@ -16,8 +16,6 @@
       </ul>
     </div>
     <div class="chat-input" v-show="!isMinimized">
-      <input type="text" placeholder="Digite sua pergunta aqui..." v-model="message">
-      <button @click="sendMessage">Enviar</button>
     </div>
   </div>
 </template>
