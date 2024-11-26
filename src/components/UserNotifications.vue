@@ -18,10 +18,11 @@
             >
               Match com {{ notification.sender_nick }}! Clique aqui para acessar o perfil do seu novo duo e adicione-o no jogo com base no seu nick de jogo!
             </span>
-            <button class="close-btn" @click.stop="removeNotification(notification.id, index)">X</button>
+            <button class="close-btn" @click.stop="removeNotification(index)">X</button>
           </div>
         </li>
       </ul>
+      <button class="clear-btn" @click.stop="clearNotifications">Limpar Notificações</button>
     </div>
     <!-- Modal de Decisão -->
     <div v-if="isDecisionModalOpen" class="modal">
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import { getNotifications, deleteNotification, acceptNotification } from "../api"; // Importa os métodos da API
+import { getNotifications, acceptNotification } from "../api"; // Importa os métodos da API
 
 export default {
   data() {
@@ -112,16 +113,10 @@ export default {
         console.error("Erro ao aceitar a conexão:", error);
       }
     },
-    async rejectConnection() {
-      try {
-        await this.removeNotification(
-          this.decisionNotification.id,
-          this.decisionIndex
-        );
-        this.isDecisionModalOpen = false;
-      } catch (error) {
-        console.error("Erro ao rejeitar notificação:", error);
-      }
+    rejectConnection() {
+      // Apenas remove a notificação localmente
+      this.notifications.splice(this.decisionIndex, 1);
+      this.isDecisionModalOpen = false;
     },
     async fetchNotifications() {
       const token = localStorage.getItem("token");
@@ -145,26 +140,13 @@ export default {
         console.error("Erro ao carregar notificações:", error);
       }
     },
-    async removeNotification(notificationId, index) {
-      try {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-          console.error("Token não encontrado");
-          return;
-        }
-
-        const response = await deleteNotification(notificationId, token);
-        if (response.status === 200) {
-          console.log(response.data.message);
-          this.notifications.splice(index, 1); // Remove a notificação localmente
-        }
-      } catch (error) {
-        console.error(
-          "Erro ao deletar notificação:",
-          error.response ? error.response.data : error
-        );
-      }
+    removeNotification(index) {
+      // Remove a notificação localmente sem chamar a API
+      this.notifications.splice(index, 1);
+    },
+    clearNotifications() {
+      // Limpa todas as notificações localmente
+      this.notifications = [];
     },
   },
   mounted() {
@@ -306,5 +288,21 @@ li:hover .notification-item {
 .reject-btn {
   background-color: #dc3545;
   color: #fff;
+}
+
+/* Estilos para o botão de limpar notificações */
+.clear-btn {
+  width: 100%;
+  background-color: #444;
+  color: #fff;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background-color: #555;
 }
 </style>
