@@ -19,9 +19,15 @@
           {{ user.username }}
         </button>
         <div class="dropdown-content" v-if="dropdownOpen">
-          <button @click="goToProfile">Perfil</button>
-          <button @click="goToMatches" class="button-connections">Conexões</button>
-          <button @click="logout">Sair</button>
+          <button @click="goToProfile">
+            <font-awesome-icon icon="user" class="dropdown-icon" /> Perfil
+          </button>
+          <button @click="goToMatches" class="button-connections">
+            <font-awesome-icon icon="history" class="dropdown-icon" /> Conexões
+          </button>
+          <button @click="logout">
+            <font-awesome-icon icon="sign-out-alt" class="dropdown-icon" /> Sair
+          </button>
         </div>
       </div>
     </nav>
@@ -31,11 +37,11 @@
 <script>
 import { getUser } from '@/api';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faBell, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faUser, faSignOutAlt, faHistory } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import UserNotifications from './UserNotifications.vue';
 
-library.add(faBell, faUser);
+library.add(faBell, faUser, faSignOutAlt, faHistory);
 
 export default {
   components: {
@@ -104,7 +110,6 @@ export default {
     goToMatches() {
       this.$router.push({ name: 'MatchesHistory' });
     },
-
     toggleDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
     }
@@ -135,6 +140,7 @@ export default {
   margin-right: 10px;
   object-fit: cover;
   box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+  cursor: pointer;
 }
 
 .site-name {
@@ -223,28 +229,36 @@ nav button:hover {
   flex-direction: column;
   position: absolute;
   right: 0;
-  background-color: #222;
-  min-width: 107px;
+  background-color: #2c2c2c;
+  min-width: 160px;
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
   z-index: 1;
   overflow: hidden;
+  border-radius: 8px;
+  margin-top: 5px;
 }
 
 .dropdown-content button {
   color: white;
-  padding: 12px 16px;
-  border-radius: 0px;
-  margin: 0px;
+  padding: 10px 15px;
+  margin: 5px;
   text-align: left;
   text-decoration: none;
-  display: block;
-  background: none;
+  display: flex;
+  align-items: center;
+  background-color: #333;
   border: none;
   cursor: pointer;
-  width: 100%;
+  width: calc(100% - 10px);
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 .dropdown-content button:hover {
-  background-color: #333;
+  background-color: #444;
+}
+
+.dropdown-content .dropdown-icon {
+  margin-right: 10px;
 }
 </style>
