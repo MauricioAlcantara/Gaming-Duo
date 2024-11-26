@@ -113,19 +113,18 @@ export default {
       this.resetStatus = '';
       this.resetError = '';
     },
-async sendResetLink() {
-  try {
-    await requestPasswordReset(this.resetEmail); // Removida a variável 'response'
-    this.resetStatus = 'Link de redefinição de senha enviado para o e-mail fornecido.';
-    this.resetError = '';
-    this.toggleResetPasswordModal();
-  } catch (error) {
-    console.error('Erro ao enviar link de redefinição de senha:', error);
-    this.resetError = 'Erro ao enviar link de redefinição de senha. Verifique o e-mail e tente novamente.';
-    this.resetStatus = '';
-  }
-}
-,
+    async sendResetLink() {
+      try {
+        await requestPasswordReset(this.resetEmail);
+        this.resetStatus = 'Link de redefinição de senha enviado para o e-mail fornecido.';
+        this.resetError = '';
+        // Mantém o modal aberto para exibir a mensagem de sucesso
+      } catch (error) {
+        console.error('Erro ao enviar link de redefinição de senha:', error);
+        this.resetError = 'Erro ao enviar link de redefinição de senha. Verifique o e-mail e tente novamente.';
+        this.resetStatus = '';
+      }
+    },
     goToRegister() {
       this.$router.push({ name: 'cadastro' });
     }
@@ -221,18 +220,21 @@ async sendResetLink() {
   background-color: #dc3545;
 }
 
-.password-reset, .register-link {
+.password-reset,
+.register-link {
   color: #CCC;
   font-size: 13px;
   cursor: pointer;
   text-decoration: underline;
 }
 
-.password-reset:hover, .register-link:hover {
+.password-reset:hover,
+.register-link:hover {
   color: white;
 }
 
-input[type="email"], input[type="password"] {
+input[type="email"],
+input[type="password"] {
   width: 100%;
   padding: 10px;
   border-radius: 4px;
@@ -244,7 +246,8 @@ input[type="email"], input[type="password"] {
   outline: none;
 }
 
-input[type="email"]:focus, input[type="password"]:focus {
+input[type="email"]:focus,
+input[type="password"]:focus {
   border-color: #f90404;
   box-shadow: 0 0 5px rgba(249, 4, 4, 0.5);
 }
@@ -259,23 +262,6 @@ input[type="email"]:focus, input[type="password"]:focus {
   font-size: 13px;
 }
 
-.reset-button {
-  width: 100%;
-  padding: 12px 20px;
-  background-color: #f90404;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 20px;
-  transition: background-color 0.3s;
-  font-size: 15px;
-}
-
-.reset-button:hover {
-  background-color: #cc0303;
-}
-
 .footer-links {
   display: flex;
   justify-content: space-between;
@@ -286,5 +272,113 @@ label {
   display: block;
   margin-bottom: 10px;
   color: #ccc;
+}
+
+/* Estilos para o Modal de Redefinição de Senha */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75); /* Fundo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background-color: #171717;
+  padding: 30px;
+  border-radius: 8px;
+  border: 1px solid #f90404;
+  width: 90%;
+  max-width: 400px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.modal-content h2 {
+  color: #fff;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal-content p {
+  color: #ccc;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal-content input[type="email"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #4c4c4c;
+  background-color: #212121;
+  color: #fff;
+  font-size: 15px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.modal-content input[type="email"]::placeholder {
+  color: #999;
+}
+
+.modal-content input[type="email"]:focus {
+  border-color: #f90404;
+  box-shadow: 0 0 5px rgba(249, 4, 4, 0.5);
+  outline: none;
+}
+
+.reset-button {
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #f90404;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+  font-size: 15px;
+}
+
+.reset-button:hover {
+  background-color: #cc0303;
+}
+
+.status-message {
+  color: #4caf50;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.error-message {
+  color: #f90404;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* Responsividade do Modal */
+@media screen and (max-width: 480px) {
+  .modal-content {
+    padding: 20px;
+    width: 90%;
+  }
+  .modal-content h2 {
+    font-size: 24px;
+  }
 }
 </style>
