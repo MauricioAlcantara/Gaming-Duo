@@ -14,6 +14,12 @@
       </div>
       <div class="matches-list">
         <table>
+          <colgroup>
+            <col style="width: 30%;">
+            <col style="width: 20%;">
+            <col style="width: 20%;">
+            <col style="width: 30%;">
+          </colgroup>
           <thead>
             <tr>
               <th>Nick</th>
@@ -119,7 +125,7 @@
         this.$router.push({ name: "UserProfileView", params: { username } });
       },
       formatDate(dateString) {
-        const options = { year: "numeric", month: "long", day: "numeric" };
+        const options = { year: "numeric", month: "2-digit", day: "2-digit" };
         return new Date(dateString).toLocaleDateString("pt-BR", options);
       },
       statusClass(status) {
@@ -247,16 +253,38 @@
   table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
   }
   
   th,
   td {
     padding: 12px;
     border-bottom: 1px solid #444;
+    word-wrap: break-word;
   }
   
   th {
     background-color: #333;
+  }
+  
+  /* Alinhamento da coluna "Nick" à esquerda */
+  th:nth-child(1),
+  td:nth-child(1) {
+    text-align: left;
+  }
+  
+  /* Alinhamento das colunas "Status" e "Data" ao centro */
+  th:nth-child(2),
+  td:nth-child(2),
+  th:nth-child(3),
+  td:nth-child(3) {
+    text-align: center;
+  }
+  
+  /* Alinhamento da coluna "Ações" à direita */
+  th:nth-child(4),
+  td:nth-child(4) {
+    text-align: right;
   }
   
   .status-confirmed {
@@ -280,21 +308,6 @@
   
   .title {
     margin-top: 100px;
-  }
-  
-  th:nth-child(2),
-  td:nth-child(2) {
-    text-align: center;
-  }
-  
-  th:nth-child(3),
-  td:nth-child(3) {
-    text-align: center;
-  }
-  
-  th:nth-child(4),
-  td:nth-child(4) {
-    text-align: right;
   }
   
   /* Styles for actions dropdown */
