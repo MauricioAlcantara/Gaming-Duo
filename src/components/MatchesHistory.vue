@@ -7,7 +7,6 @@
             type="text"
             v-model="search"
             placeholder="Buscar por nick ou status"
-            @input="fetchMatches"
             class="search-input"
           />
           <span class="search-icon">&#128269;</span>
@@ -25,7 +24,7 @@
           </thead>
           <tbody>
             <tr v-for="match in filteredMatches" :key="match.id">
-              <td>{{ match.target_nick }}</td>
+              <td>{{ match.nick }}</td>
               <td>
                 <span :class="statusClass(match.status)">
                   {{ match.status }}
@@ -35,7 +34,7 @@
               <td>
                 <button
                   v-if="match.status === 'Confirmado'"
-                  @click="goToUserProfile(match.target_username)"
+                  @click="goToUserProfile(match.username)"
                   class="view-profile-button"
                 >
                   Ver Perfil
@@ -72,7 +71,7 @@
       filteredMatches() {
         return this.matches.filter(
           (match) =>
-            match.target_nick
+            match.nick
               .toLowerCase()
               .includes(this.search.toLowerCase()) ||
             match.status.toLowerCase().includes(this.search.toLowerCase())
@@ -92,7 +91,7 @@
           const response = await getMatchesHistory(token);
           this.matches = response.data.matches.map((match) => ({
             ...match,
-            status: match.isAccepted ? "Confirmado" : "Pendente",
+            status: this.translateStatus(match.status),
           }));
         } catch (error) {
           console.error("Erro ao carregar o histórico de conexões:", error);
@@ -113,7 +112,20 @@
         return {
           "status-confirmed": status === "Confirmado",
           "status-pending": status === "Pendente",
+          "status-rejected": status === "Recusado",
         };
+      },
+      translateStatus(status) {
+        switch(status) {
+            case 'accepted':
+                return 'Confirmado';
+            case 'pending':
+                return 'Pendente';
+            case 'rejected':
+                return 'Recusado';
+            default:
+                return status;
+        }
       },
     },
     mounted() {
@@ -229,6 +241,10 @@
     color: #ff9800;
   }
   
+  .status-rejected {
+    color: #f44336;
+  }
+  
   td {
     color: #fff;
   }
@@ -237,4 +253,3 @@
     margin-top: 100px;
   }
   </style>
-  

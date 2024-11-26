@@ -103,4 +103,12 @@ export const sendNotification = (data) => {
     return api.post('/sendNotification', data);
 };
 
+export const getMatchesHistory = (token) => {
+    return api.get('/matches', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+};
+
 export default api;
